@@ -1,0 +1,22 @@
+//
+// Prefix header for all source files of the 'FoursquareBrowser' target in the 'FoursquareBrowser' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_4_0
+#warning "This project uses features only available in iOS SDK 4.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+
+    #import "IMPORTANT.h"
+    #import "UIImageView+AFNetworking.h"
+
+    #import "UIViewController+ProgressHUD.h"
+#endif
+
+#define M5FoursquareAPITimeout 10
+#define M5PreferredCategoryIconSize 64

@@ -1,0 +1,6 @@
+Sorry about the lack of submodules. This was a quicky.
+
+You'll need to make a file called IMPORTANT.h in the FoursquareBrowser subdirectory that contains your Foursquare app ID and secret, like this:
+
+#define M5FoursquareAppID @"myid"
+#define M5FoursquareAppSecret @"mysecret"
