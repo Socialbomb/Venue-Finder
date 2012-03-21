@@ -150,7 +150,6 @@
         if([category.name rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound ||
            (category.parentCategory && [category.parentCategory.name rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound))
         {
-            NSLog(@"category %@ matches %@", category.name, searchString);
             return YES;
         }
            
