@@ -18,6 +18,8 @@
 -(IBAction)cancelButtonTapped:(id)sender;
 -(IBAction)noFilterButtonTapped:(id)sender;
 
+-(M5VenueCategory *)categoryForIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)theTableView;
+
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -66,8 +68,14 @@
     [self.delegate categoriesControllerDidCancel:self];
 }
 
-- (IBAction)noFilterButtonTapped:(id)sender {
+-(IBAction)noFilterButtonTapped:(id)sender {
     [self.delegate categoriesController:self didSelectCategory:nil];
+}
+
+-(M5VenueCategory *)categoryForIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)theTableView
+{
+    NSArray *dataSource = (theTableView == tableView) ? categories : filteredCategories;
+    return [dataSource objectAtIndex:indexPath.row];
 }
 
 #pragma mark - UITableViewDataSource and UITableViewDelegate
@@ -90,49 +98,25 @@
     UITableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:@"Cell"];
     if(!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
     
-    M5VenueCategory *category;
-    
-    if(theTableView == searchController.searchResultsTableView)
-        category = [filteredCategories objectAtIndex:indexPath.row];
-    else
-        category = [categories objectAtIndex:indexPath.row];
+    M5VenueCategory *category = [self categoryForIndexPath:indexPath inTableView:theTableView];
     
     cell.textLabel.text = category.name;
-    if(category.parentCategory) {
-        if(category.subcategories)
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Parent category: %@; %u subcategories", category.parentCategory.name, category.subcategories.count];
-        else
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"Parent category: %@", category.parentCategory.name];
-    }
-    else
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"Root category; %u subcategories", category.subcategories.count];
+    cell.detailTextLabel.text = category.relationshipsDescription;
     
     return cell;
 }
 
 -(void)tableView:(UITableView *)theTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    M5VenueCategory *category;
-    
-    if(theTableView == searchController.searchResultsTableView)
-        category = [filteredCategories objectAtIndex:indexPath.row];
-    else
-        category = [categories objectAtIndex:indexPath.row];
-    
+    M5VenueCategory *category = [self categoryForIndexPath:indexPath inTableView:theTableView];
     [cell.imageView setImageWithURL:category.iconURL placeholderImage:blankImage];
 }
 
 -(void)tableView:(UITableView *)theTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    M5VenueCategory *category;
-    if(theTableView == searchController.searchResultsTableView)
-        category = [filteredCategories objectAtIndex:indexPath.row];
-    else
-        category = [categories objectAtIndex:indexPath.row];
-    
+    M5VenueCategory *category = [self categoryForIndexPath:indexPath inTableView:theTableView];    
     [self.delegate categoriesController:self didSelectCategory:category];
 }
 
@@ -149,7 +133,7 @@
 -(void)tableView:(UITableView *)theTableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if(action == @selector(copy:)) {
-        M5VenueCategory *category = [((theTableView == searchController.searchResultsTableView) ? filteredCategories : categories) objectAtIndex:indexPath.row];
+        M5VenueCategory *category = [self categoryForIndexPath:indexPath inTableView:theTableView];
         [UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"%@ - %@", category.name, category._id];
     }
 }

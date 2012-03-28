@@ -17,6 +17,7 @@
 -(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories;
 -(NSArray *)flattenCategories:(NSArray *)theCategories;
 -(double)areaCoveredByRegion:(MKCoordinateRegion)mapRegion;
+-(NSString *)pathForVenueID:(NSString *)venueID;
 
 @end
 
@@ -106,8 +107,8 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    @"browse", @"intent", 
                                    @"50", @"limit",
-                                   [NSString stringWithFormat:@"%.6f,%.6f", northEastCorner.latitude, northEastCorner.longitude], @"ne",
-                                   [NSString stringWithFormat:@"%.6f,%.6f", southWestCorner.latitude, southWestCorner.longitude], @"sw",
+                                   [NSString stringWithFormat:@"%.7f,%.7f", northEastCorner.latitude, northEastCorner.longitude], @"ne",
+                                   [NSString stringWithFormat:@"%.7f,%.7f", southWestCorner.latitude, southWestCorner.longitude], @"sw",
                                    nil];
     
     if(categoryID)
@@ -128,9 +129,14 @@
     }];
 }
 
+-(NSString *)pathForVenueID:(NSString *)venueID
+{
+    return [@"venues/" stringByAppendingString:venueID];
+}
+
 -(void)getVenueWithID:(NSString *)venueID completion:(void (^)(M5Venue *))completion failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
 {
-    NSString *path = [NSString stringWithFormat:@"venues/%@", venueID];
+    NSString *path = [self pathForVenueID:venueID];
     [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id JSON) {
         NSDictionary *venueDict = [[JSON objectForKey:@"response"] objectForKey:@"venue"];
         
@@ -145,7 +151,7 @@
 
 -(void)cancelGetOfVenueID:(NSString *)venueID
 {
-    [self cancelAllHTTPOperationsWithMethod:@"GET" path:[NSString stringWithFormat:@"venues/%@", venueID]];
+    [self cancelAllHTTPOperationsWithMethod:@"GET" path:[self pathForVenueID:venueID]];
 }
 
 #pragma mark - Utilities

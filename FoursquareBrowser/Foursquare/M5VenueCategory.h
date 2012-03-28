@@ -16,6 +16,8 @@
 @property (nonatomic, strong, readonly) NSURL *iconURL;
 @property (nonatomic, weak, readonly) M5VenueCategory *parentCategory;
 
+@property (nonatomic, readonly) NSString *relationshipsDescription;
+
 -(id)initWithDictionary:(NSDictionary *)dictionary;
 
 @end

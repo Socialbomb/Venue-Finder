@@ -13,6 +13,8 @@ typedef enum {
     M5VenueTableLocationSection = 0,
     M5VenueTableGeneralInfoSection,
     M5VenueTableStatsSection,
+    M5VenueTableCategoriesSection,
+    M5VenueTableTagsSection,
     M5VenueTableMetadataSection,
     M5VenueTableSectionCount
 } M5VenueTableSection;
@@ -25,6 +27,7 @@ typedef enum {
 @property (nonatomic, assign) BOOL copyable;
 @property (nonatomic, weak) id target;
 @property (nonatomic, assign) SEL selector;
+@property (nonatomic, assign) BOOL subtitleCellStyle;
 
 -(id)initWithName:(NSString *)theName value:(NSString *)theValue copyable:(BOOL)copyable;
 -(id)initWithName:(NSString *)theName value:(NSString *)theValue copyable:(BOOL)copyable target:(id)theTarget selector:(SEL)theSelector;
@@ -34,7 +37,7 @@ typedef enum {
 
 @implementation M5VenueCellData
 
-@synthesize name, value, copyable, target, selector;
+@synthesize name, value, copyable, target, selector, subtitleCellStyle;
 
 -(id)initWithName:(NSString *)theName value:(NSString *)theValue copyable:(BOOL)copyableFlag target:(id)theTarget selector:(SEL)theSelector
 {
@@ -84,8 +87,13 @@ typedef enum {
 -(void)prepareData;
 -(M5VenueCellData *)cellDataForIndexPath:(NSIndexPath *)indexPath;
 
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value copyable:(BOOL)copyable target:(id)target selector:(SEL)selector;
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value copyable:(BOOL)copyable;
 -(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value;
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value copyable:(BOOL)copyable target:(id)target selector:(SEL)selector;
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value copyable:(BOOL)copyable;
 -(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value;
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name uintValue:(uint)value;
 
 @end
 
@@ -100,7 +108,7 @@ typedef enum {
     self = [super initWithNibName:@"M5VenueViewController" bundle:nil];
     if (self) {
         abbreviatedVenue = theAbbreviatedVenue;
-        sectionTitles = [NSArray arrayWithObjects:@"Location", @"General Info", @"Stats", @"Metadata", nil];
+        sectionTitles = [NSArray arrayWithObjects:@"Location", @"General Info", @"Stats", @"Categories", @"Tags", @"Metadata", nil];
     }
     return self;
 }
@@ -141,7 +149,7 @@ typedef enum {
     [[UIApplication sharedApplication] openURL:abbreviatedVenue.venueURL];
 }
 
-#pragma mark Cell selection handlers
+#pragma mark - Cell selection handlers
 
 -(void)addressCellSelected:(M5VenueCellData *)cellData indexPath:(NSIndexPath *)indexPath
 {
@@ -158,7 +166,7 @@ typedef enum {
 
 -(void)phoneCellSelected:(M5VenueCellData *)cellData indexPath:(NSIndexPath *)indexPath
 {
-    NSString *urlString = [NSString stringWithFormat:@"tel:%@", venue.phoneNumber];
+    NSString *urlString = [NSString stringWithFormat:@"tel:%@", venue.phoneNumber ? venue.phoneNumber : venue.formattedPhoneNumber];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
 }
 
@@ -187,45 +195,6 @@ typedef enum {
     }];
 }
 
--(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value copyable:(BOOL)copyable target:(id)target selector:(SEL)selector
-{
-    M5VenueCellData *data = [[M5VenueCellData alloc] initWithName:name value:value copyable:copyable target:target selector:selector];
-    [array addObject:data];
-}
-
--(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value copyable:(BOOL)copyable
-{
-    [self addCellDataToArray:array name:name value:value copyable:copyable target:nil selector:NULL];
-}
-
--(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value
-{
-    M5VenueCellData *data = [[M5VenueCellData alloc] initWithName:name value:value copyable:NO];
-    [array addObject:data];
-}
-
--(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value copyable:(BOOL)copyable target:(id)target selector:(SEL)selector
-{
-    if(value)
-        [self addCellDataToArray:array name:name value:value copyable:copyable target:target selector:selector];
-}
-
--(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value copyable:(BOOL)copyable
-{
-    [self addCellDataToArray:array name:name ifValueNotNull:value copyable:copyable target:nil selector:NULL];
-}
-
--(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value
-{
-    if(value)
-        [self addCellDataToArray:array name:name value:value];
-}
-
--(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name uintValue:(uint)value
-{
-    [self addCellDataToArray:array name:name value:[NSString stringWithFormat:@"%u", value]];
-}
-
 -(void)prepareData
 {
     NSMutableArray *locationData = [NSMutableArray array];
@@ -246,6 +215,20 @@ typedef enum {
     [self addCellDataToArray:statsData name:@"Users" uintValue:venue.stats.totalUsers];
     [self addCellDataToArray:statsData name:@"Total Tips" uintValue:venue.stats.totalTips];
     
+    NSMutableArray *categoryData = [NSMutableArray arrayWithCapacity:venue.categories.count];
+    for(M5VenueCategory *category in venue.categories) {
+        M5VenueCellData *data = [[M5VenueCellData alloc] initWithName:category.name value:category.relationshipsDescription copyable:NO];
+        data.subtitleCellStyle = YES;
+        [categoryData addObject:data];
+    }
+    
+    NSMutableArray *tagData = [NSMutableArray arrayWithCapacity:venue.tags.count];
+    for(NSString *tag in venue.tags) {
+        M5VenueCellData *data = [[M5VenueCellData alloc] initWithName:tag value:nil copyable:NO];
+        data.subtitleCellStyle = YES;
+        [tagData addObject:data];
+    }
+    
     NSMutableArray *metadataData = [NSMutableArray array];
     [self addCellDataToArray:metadataData name:@"ID" value:venue._id copyable:YES];
     if(venue.createdAt) {
@@ -256,7 +239,7 @@ typedef enum {
     }
     [self addCellDataToArray:metadataData name:@"Verified" value:venue.verified ? @"Yes" : @"No"];
     
-    cellDataBySection = [NSArray arrayWithObjects:locationData, infoData, statsData, metadataData, nil];
+    cellDataBySection = [NSArray arrayWithObjects:locationData, infoData, statsData, categoryData, tagData, metadataData, nil];
 }
 
 -(M5VenueCellData *)cellDataForIndexPath:(NSIndexPath *)indexPath
@@ -298,12 +281,14 @@ typedef enum {
 {
     if(!venue) return nil;
     
-    UITableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:@"Cell"];
-    if(!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"Cell"];
-    }
-    
     M5VenueCellData *data = [self cellDataForIndexPath:indexPath];
+    NSString *reuseIdentifier = data.subtitleCellStyle ? @"SubtitleCell" : @"Cell";
+    UITableViewCellStyle cellStyle = data.subtitleCellStyle ? UITableViewCellStyleSubtitle : UITableViewCellStyleValue2;
+    
+    UITableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    if(!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:cellStyle reuseIdentifier:reuseIdentifier];
+    }
     
     cell.textLabel.text = data.name;
     cell.detailTextLabel.text = data.value;
@@ -345,6 +330,47 @@ typedef enum {
     [data handleSelection:indexPath];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Utilities
+
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value copyable:(BOOL)copyable target:(id)target selector:(SEL)selector
+{
+    M5VenueCellData *data = [[M5VenueCellData alloc] initWithName:name value:value copyable:copyable target:target selector:selector];
+    [array addObject:data];
+}
+
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value copyable:(BOOL)copyable
+{
+    [self addCellDataToArray:array name:name value:value copyable:copyable target:nil selector:NULL];
+}
+
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name value:(NSString *)value
+{
+    M5VenueCellData *data = [[M5VenueCellData alloc] initWithName:name value:value copyable:NO];
+    [array addObject:data];
+}
+
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value copyable:(BOOL)copyable target:(id)target selector:(SEL)selector
+{
+    if(value)
+        [self addCellDataToArray:array name:name value:value copyable:copyable target:target selector:selector];
+}
+
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value copyable:(BOOL)copyable
+{
+    [self addCellDataToArray:array name:name ifValueNotNull:value copyable:copyable target:nil selector:NULL];
+}
+
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name ifValueNotNull:(NSString *)value
+{
+    if(value)
+        [self addCellDataToArray:array name:name value:value];
+}
+
+-(void)addCellDataToArray:(NSMutableArray *)array name:(NSString *)name uintValue:(uint)value
+{
+    [self addCellDataToArray:array name:name value:[NSString stringWithFormat:@"%u", value]];
 }
 
 @end

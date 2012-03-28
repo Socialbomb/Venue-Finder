@@ -67,9 +67,16 @@
     return self;
 }
 
--(NSString *)description
+-(NSString *)relationshipsDescription
 {
-    return [NSString stringWithFormat:@"%@ (%@, %u subcategories)", name, _id, subcategories.count];
+    if(self.parentCategory) {
+        if(self.subcategories)
+            return [NSString stringWithFormat:@"Parent category: %@; %u subcategories", self.parentCategory.name, self.subcategories.count];
+        else
+            return [NSString stringWithFormat:@"Parent category: %@", self.parentCategory.name];
+    }
+    else
+        return [NSString stringWithFormat:@"Root category; %u subcategories", self.subcategories.count];
 }
 
 @end
