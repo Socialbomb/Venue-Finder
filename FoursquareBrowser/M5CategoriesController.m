@@ -112,6 +112,18 @@
     return cell;
 }
 
+-(void)tableView:(UITableView *)theTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    M5VenueCategory *category;
+    
+    if(theTableView == searchController.searchResultsTableView)
+        category = [filteredCategories objectAtIndex:indexPath.row];
+    else
+        category = [categories objectAtIndex:indexPath.row];
+    
+    [cell.imageView setImageWithURL:category.iconURL placeholderImage:[UIImage imageNamed:@"blank.png"]];
+}
+
 -(void)tableView:(UITableView *)theTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     M5VenueCategory *category;

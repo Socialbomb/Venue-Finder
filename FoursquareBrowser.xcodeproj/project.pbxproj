@@ -37,6 +37,8 @@
 		BD8B2385151A77B700EA2615 /* M5Venue.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8B2384151A77B700EA2615 /* M5Venue.m */; };
 		BD8B2387151A784C00EA2615 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD8B2386151A784C00EA2615 /* CoreLocation.framework */; };
 		BDCAAF6F1523703D00E35CD8 /* CLLocation+measuring.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */; };
+		BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7B15237C2000E35CD8 /* blank.png */; };
+		BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7C15237C2000E35CD8 /* blank@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +98,8 @@
 		BDCAAF6D1523702900E35CD8 /* CLLocation+measuring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CLLocation+measuring.h"; sourceTree = "<group>"; };
 		BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+measuring.m"; sourceTree = "<group>"; };
 		BDCAAF701523705800E35CD8 /* CLUtilsDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLUtilsDefines.h; sourceTree = "<group>"; };
+		BDCAAF7B15237C2000E35CD8 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
+		BDCAAF7C15237C2000E35CD8 /* blank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +168,8 @@
 				BD27F3B515226C2E008B874B /* M5VenueViewController.h */,
 				BD27F3B615226C2E008B874B /* M5VenueViewController.m */,
 				BD27F3B715226C2F008B874B /* M5VenueViewController.xib */,
+				BDCAAF7B15237C2000E35CD8 /* blank.png */,
+				BDCAAF7C15237C2000E35CD8 /* blank@2x.png */,
 			);
 			path = FoursquareBrowser;
 			sourceTree = "<group>";
@@ -295,6 +301,8 @@
 				BD23D1BF151A3D5B00880922 /* M5ViewController.xib in Resources */,
 				BD8B2382151A6BFE00EA2615 /* M5CategoriesController.xib in Resources */,
 				BD27F3B915226C2F008B874B /* M5VenueViewController.xib in Resources */,
+				BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */,
+				BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
