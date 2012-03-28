@@ -39,6 +39,8 @@
 		BDCAAF6F1523703D00E35CD8 /* CLLocation+measuring.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */; };
 		BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7B15237C2000E35CD8 /* blank.png */; };
 		BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7C15237C2000E35CD8 /* blank@2x.png */; };
+		BDCAAF941523A43400E35CD8 /* venuelocator.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF931523A43400E35CD8 /* venuelocator.png */; };
+		BDCAAF961523A43600E35CD8 /* venuelocator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +102,8 @@
 		BDCAAF701523705800E35CD8 /* CLUtilsDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLUtilsDefines.h; sourceTree = "<group>"; };
 		BDCAAF7B15237C2000E35CD8 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
 		BDCAAF7C15237C2000E35CD8 /* blank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank@2x.png"; sourceTree = "<group>"; };
+		BDCAAF931523A43400E35CD8 /* venuelocator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = venuelocator.png; path = ../../venuelocator.png; sourceTree = "<group>"; };
+		BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "venuelocator@2x.png"; path = "../../venuelocator@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +157,7 @@
 		BD23D1AE151A3D5B00880922 /* FoursquareBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				BDCAAF8D1523A3BC00E35CD8 /* Resources */,
 				BD23D1E5151A3FC100880922 /* Foursquare */,
 				BD23D1B7151A3D5B00880922 /* M5AppDelegate.h */,
 				BD23D1B8151A3D5B00880922 /* M5AppDelegate.m */,
@@ -168,8 +173,6 @@
 				BD27F3B515226C2E008B874B /* M5VenueViewController.h */,
 				BD27F3B615226C2E008B874B /* M5VenueViewController.m */,
 				BD27F3B715226C2F008B874B /* M5VenueViewController.xib */,
-				BDCAAF7B15237C2000E35CD8 /* blank.png */,
-				BDCAAF7C15237C2000E35CD8 /* blank@2x.png */,
 			);
 			path = FoursquareBrowser;
 			sourceTree = "<group>";
@@ -246,6 +249,17 @@
 			name = CoreLocationUtils;
 			sourceTree = "<group>";
 		};
+		BDCAAF8D1523A3BC00E35CD8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BDCAAF7B15237C2000E35CD8 /* blank.png */,
+				BDCAAF7C15237C2000E35CD8 /* blank@2x.png */,
+				BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */,
+				BDCAAF931523A43400E35CD8 /* venuelocator.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -303,6 +317,8 @@
 				BD27F3B915226C2F008B874B /* M5VenueViewController.xib in Resources */,
 				BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */,
 				BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */,
+				BDCAAF941523A43400E35CD8 /* venuelocator.png in Resources */,
+				BDCAAF961523A43600E35CD8 /* venuelocator@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
