@@ -23,7 +23,6 @@ typedef enum {
     BOOL didAppear;
 }
 
-@property (weak, nonatomic) IBOutlet UILabel *categoryName;
 @property (weak, nonatomic) IBOutlet UIView *refreshContainer;
 @property (weak, nonatomic) IBOutlet UIButton *refreshButton;
 @property (weak, nonatomic) IBOutlet UILabel *tooBigLabel;
@@ -48,7 +47,6 @@ typedef enum {
 
 @synthesize mapView;
 @synthesize currentCategoryName;
-@synthesize categoryName;
 @synthesize refreshContainer;
 @synthesize refreshButton;
 @synthesize tooBigLabel;
@@ -74,7 +72,6 @@ typedef enum {
 
 -(void)viewDidUnload
 {
-    [self setCategoryName:nil];
     [self setRefreshContainer:nil];
     [self setMapView:nil];
     [self setCurrentCategoryName:nil];
