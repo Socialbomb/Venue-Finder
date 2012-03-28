@@ -41,6 +41,8 @@
 		BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7C15237C2000E35CD8 /* blank@2x.png */; };
 		BDCAAF941523A43400E35CD8 /* venuelocator.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF931523A43400E35CD8 /* venuelocator.png */; };
 		BDCAAF961523A43600E35CD8 /* venuelocator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */; };
+		BDCAAFB01523C01700E35CD8 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */; };
+		BDCAAFB41523C0A600E35CD8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCAAFB31523C0A600E35CD8 /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +106,9 @@
 		BDCAAF7C15237C2000E35CD8 /* blank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank@2x.png"; sourceTree = "<group>"; };
 		BDCAAF931523A43400E35CD8 /* venuelocator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = venuelocator.png; path = ../../venuelocator.png; sourceTree = "<group>"; };
 		BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "venuelocator@2x.png"; path = "../../venuelocator@2x.png"; sourceTree = "<group>"; };
+		BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		BDCAAFAF1523C01700E35CD8 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		BDCAAFB31523C0A600E35CD8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,11 +116,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDCAAFB41523C0A600E35CD8 /* libz.dylib in Frameworks */,
 				BD8B2387151A784C00EA2615 /* CoreLocation.framework in Frameworks */,
 				BD8B236E151A624C00EA2615 /* MapKit.framework in Frameworks */,
 				BD23D1A9151A3D5B00880922 /* UIKit.framework in Frameworks */,
 				BD23D1AB151A3D5B00880922 /* Foundation.framework in Frameworks */,
 				BD23D1AD151A3D5B00880922 /* CoreGraphics.framework in Frameworks */,
+				BDCAAFB01523C01700E35CD8 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +135,7 @@
 				BDCAAF6B1523701B00E35CD8 /* CoreLocationUtils */,
 				BD8B2364151A5F3700EA2615 /* MBProgressHUD */,
 				BD23D1C5151A3F4300880922 /* AFNetworking */,
+				BDCAAFAB1523C01700E35CD8 /* TestFlightSDK1 */,
 				BD23D1AE151A3D5B00880922 /* FoursquareBrowser */,
 				BD23D1A7151A3D5B00880922 /* Frameworks */,
 				BD23D1A5151A3D5B00880922 /* Products */,
@@ -145,6 +153,7 @@
 		BD23D1A7151A3D5B00880922 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BDCAAFB31523C0A600E35CD8 /* libz.dylib */,
 				BD8B2386151A784C00EA2615 /* CoreLocation.framework */,
 				BD8B236D151A624C00EA2615 /* MapKit.framework */,
 				BD23D1A8151A3D5B00880922 /* UIKit.framework */,
@@ -258,6 +267,15 @@
 				BDCAAF931523A43400E35CD8 /* venuelocator.png */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		BDCAAFAB1523C01700E35CD8 /* TestFlightSDK1 */ = {
+			isa = PBXGroup;
+			children = (
+				BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */,
+				BDCAAFAF1523C01700E35CD8 /* TestFlight.h */,
+			);
+			path = TestFlightSDK1;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -426,6 +444,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FoursquareBrowser/FoursquareBrowser-Prefix.pch";
 				INFOPLIST_FILE = "FoursquareBrowser/FoursquareBrowser-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlightSDK1\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -437,6 +459,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FoursquareBrowser/FoursquareBrowser-Prefix.pch";
 				INFOPLIST_FILE = "FoursquareBrowser/FoursquareBrowser-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlightSDK1\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

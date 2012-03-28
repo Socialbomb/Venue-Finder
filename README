@@ -4,3 +4,7 @@ You'll need to make a file called IMPORTANT.h in the FoursquareBrowser subdirect
 
 #define M5FoursquareAppID @"myid"
 #define M5FoursquareAppSecret @"mysecret"
+
+And, if you want to enable TestFlight, also add:
+
+#define M5TestFlightTeamToken @"token"

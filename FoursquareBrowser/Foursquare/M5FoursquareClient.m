@@ -10,6 +10,10 @@
 #import "AFJSONRequestOperation.h"
 #import "CLLocation+measuring.h"
 
+static const int M5FoursquareAPITimeout = 10;
+static const double M5FoursquareMaxSearchAreaMeters = 10000000000;  // The Foursquare docs say the max searchable region is approximately 10,000 sq km
+
+
 @interface M5FoursquareClient ()
 
 @property (nonatomic, strong, readwrite) NSArray *venueCategories;

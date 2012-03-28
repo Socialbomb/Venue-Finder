@@ -8,6 +8,8 @@
 
 #import "M5VenueCategory.h"
 
+static const int M5PreferredCategoryIconSize = 64;
+
 @interface M5VenueCategory ()
 
 @property (nonatomic, weak, readwrite) M5VenueCategory *parentCategory;
