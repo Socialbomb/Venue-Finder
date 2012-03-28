@@ -15,6 +15,9 @@
 
 +(M5FoursquareClient *)sharedClient;
 
+@property (nonatomic, strong, readonly) NSArray *venueCategories;
+-(M5VenueCategory *)venueCategoryForID:(NSString *)venueCategoryID;
+
 -(void)getVenueCategoriesWithCompletion:(void (^)(NSArray *categories))completion
                                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
@@ -22,5 +25,11 @@
                inMapRegion:(MKCoordinateRegion)mapRegion
                 completion:(void (^)(NSArray *venues))completion
                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+-(void)getVenueWithID:(NSString *)venueID
+           completion:(void (^)(M5Venue *venue))completion
+              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+-(void)cancelGetOfVenueID:(NSString *)venueID;
 
 @end

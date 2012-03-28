@@ -10,6 +10,7 @@
 #import "M5FoursquareClient.h"
 #import <MapKit/MapKit.h>
 #import "M5CategoriesController.h"
+#import "M5VenueViewController.h"
 
 typedef enum {
     M5AlertCategoryError
@@ -35,9 +36,6 @@ typedef enum {
 
 -(void)showRefreshButton;
 -(void)hideRefreshButton;
-
--(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories;
--(NSArray *)flattenCategories:(NSArray *)theCategories;
 
 -(void)removeAllAnnotations;
 
@@ -126,9 +124,9 @@ typedef enum {
 -(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
     M5Venue *venue = (M5Venue *)view.annotation;
-    
-    NSString *urlString = [NSString stringWithFormat:@"https://foursquare.com/v/%@", venue._id];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+
+    M5VenueViewController *venueVC = [[M5VenueViewController alloc] initWithAbbreviatedVenue:venue];
+    [self presentModalViewController:venueVC animated:YES];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -148,7 +146,7 @@ typedef enum {
 {
     [self showHUDFromViewWithText:@"Loading" details:@"fetching categories" dimScreen:YES];
     [[M5FoursquareClient sharedClient] getVenueCategoriesWithCompletion:^(NSArray *theCategories) {
-        flattenedCategories = [self flattenCategories:theCategories];
+        flattenedCategories = theCategories;
         
         [self hideAllHUDsFromView];
         
@@ -245,26 +243,6 @@ typedef enum {
                          newFrame.origin.y = self.view.frame.size.height;
                          refreshContainer.frame = newFrame;
                      } completion:NULL];
-}
-
--(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories
-{
-    for(M5VenueCategory *category in someCategories) {
-        [flatCategories addObject:category];
-
-        if(category.subcategories)
-            [self addToFlatCategories:category.subcategories accumulator:flatCategories];
-    }
-}
-
--(NSArray *)flattenCategories:(NSArray *)theCategories
-{
-    NSMutableArray *flatCategories = [NSMutableArray array];
-    [self addToFlatCategories:theCategories accumulator:flatCategories];
-    
-    [flatCategories sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
-    
-    return flatCategories;
 }
 
 -(void)removeAllAnnotations

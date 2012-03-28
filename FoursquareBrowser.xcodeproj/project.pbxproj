@@ -27,6 +27,8 @@
 		BD23D1E4151A3F7A00880922 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = BD23D1DA151A3F5700880922 /* UIImageView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BD23D1E8151A3FD900880922 /* M5FoursquareClient.m in Sources */ = {isa = PBXBuildFile; fileRef = BD23D1E7151A3FD900880922 /* M5FoursquareClient.m */; };
 		BD23D1FA151A561B00880922 /* M5VenueCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = BD23D1F9151A561B00880922 /* M5VenueCategory.m */; };
+		BD27F3B815226C2F008B874B /* M5VenueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD27F3B615226C2E008B874B /* M5VenueViewController.m */; };
+		BD27F3B915226C2F008B874B /* M5VenueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD27F3B715226C2F008B874B /* M5VenueViewController.xib */; };
 		BD8B2368151A5F5400EA2615 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8B2367151A5F5200EA2615 /* MBProgressHUD.m */; };
 		BD8B236C151A5FF700EA2615 /* UIViewController+ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8B236B151A5FF700EA2615 /* UIViewController+ProgressHUD.m */; };
 		BD8B236E151A624C00EA2615 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD8B236D151A624C00EA2615 /* MapKit.framework */; };
@@ -76,6 +78,9 @@
 		BD23D1E9151A401300880922 /* IMPORTANT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMPORTANT.h; sourceTree = "<group>"; };
 		BD23D1F8151A561B00880922 /* M5VenueCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5VenueCategory.h; sourceTree = "<group>"; };
 		BD23D1F9151A561B00880922 /* M5VenueCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5VenueCategory.m; sourceTree = "<group>"; };
+		BD27F3B515226C2E008B874B /* M5VenueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5VenueViewController.h; sourceTree = "<group>"; };
+		BD27F3B615226C2E008B874B /* M5VenueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5VenueViewController.m; sourceTree = "<group>"; };
+		BD27F3B715226C2F008B874B /* M5VenueViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = M5VenueViewController.xib; sourceTree = "<group>"; };
 		BD8B2366151A5F5200EA2615 /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		BD8B2367151A5F5200EA2615 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		BD8B236A151A5FF700EA2615 /* UIViewController+ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ProgressHUD.h"; sourceTree = "<group>"; };
@@ -151,6 +156,9 @@
 				BD8B237E151A6BFE00EA2615 /* M5CategoriesController.h */,
 				BD8B237F151A6BFE00EA2615 /* M5CategoriesController.m */,
 				BD8B2380151A6BFE00EA2615 /* M5CategoriesController.xib */,
+				BD27F3B515226C2E008B874B /* M5VenueViewController.h */,
+				BD27F3B615226C2E008B874B /* M5VenueViewController.m */,
+				BD27F3B715226C2F008B874B /* M5VenueViewController.xib */,
 			);
 			path = FoursquareBrowser;
 			sourceTree = "<group>";
@@ -271,6 +279,7 @@
 				BD23D1B3151A3D5B00880922 /* InfoPlist.strings in Resources */,
 				BD23D1BF151A3D5B00880922 /* M5ViewController.xib in Resources */,
 				BD8B2382151A6BFE00EA2615 /* M5CategoriesController.xib in Resources */,
+				BD27F3B915226C2F008B874B /* M5VenueViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +309,7 @@
 				BD8B236C151A5FF700EA2615 /* UIViewController+ProgressHUD.m in Sources */,
 				BD8B2381151A6BFE00EA2615 /* M5CategoriesController.m in Sources */,
 				BD8B2385151A77B700EA2615 /* M5Venue.m in Sources */,
+				BD27F3B815226C2F008B874B /* M5VenueViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

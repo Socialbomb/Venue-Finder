@@ -9,7 +9,19 @@
 #import "M5FoursquareClient.h"
 #import "AFJSONRequestOperation.h"
 
+@interface M5FoursquareClient ()
+
+@property (nonatomic, strong, readwrite) NSArray *venueCategories;
+
+-(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories;
+-(NSArray *)flattenCategories:(NSArray *)theCategories;
+
+@end
+
+
 @implementation M5FoursquareClient
+
+@synthesize venueCategories;
 
 +(M5FoursquareClient *)sharedClient
 {
@@ -66,8 +78,10 @@
         for(NSDictionary *categoryDict in categoryDicts)
             [categories addObject:[[M5VenueCategory alloc] initWithDictionary:categoryDict]];
         
+        self.venueCategories = [self flattenCategories:categories];
+        
         if(completion)
-            completion(categories);
+            completion(self.venueCategories);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if(failure)
             failure(operation, error);
@@ -105,6 +119,58 @@
         if(failure)
             failure(operation, error);
     }];
+}
+
+-(void)getVenueWithID:(NSString *)venueID completion:(void (^)(M5Venue *))completion failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+{
+    NSString *path = [NSString stringWithFormat:@"venues/%@", venueID];
+    [self getPath:path parameters:nil success:^(AFHTTPRequestOperation *operation, id JSON) {
+        NSDictionary *venueDict = [[JSON objectForKey:@"response"] objectForKey:@"venue"];
+        
+        M5Venue *venue = [[M5Venue alloc] initWithDictionary:venueDict];
+        if(completion)
+            completion(venue);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if(failure)
+            failure(operation, error);
+    }];
+}
+
+-(void)cancelGetOfVenueID:(NSString *)venueID
+{
+    [self cancelAllHTTPOperationsWithMethod:@"GET" path:[NSString stringWithFormat:@"venues/%@", venueID]];
+}
+
+#pragma mark - Utilities
+
+-(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories
+{
+    for(M5VenueCategory *category in someCategories) {
+        [flatCategories addObject:category];
+        
+        if(category.subcategories)
+            [self addToFlatCategories:category.subcategories accumulator:flatCategories];
+    }
+}
+
+-(NSArray *)flattenCategories:(NSArray *)theCategories
+{
+    NSMutableArray *flatCategories = [NSMutableArray array];
+    [self addToFlatCategories:theCategories accumulator:flatCategories];
+    
+    [flatCategories sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+    
+    return flatCategories;
+}
+
+-(M5VenueCategory *)venueCategoryForID:(NSString *)venueCategoryID
+{
+    for(M5VenueCategory *category in self.venueCategories) {
+        if([category._id isEqualToString:venueCategoryID])
+            return category;
+    }
+    
+    return nil;
 }
 
 @end
