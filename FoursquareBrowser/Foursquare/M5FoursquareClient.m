@@ -8,6 +8,7 @@
 
 #import "M5FoursquareClient.h"
 #import "AFJSONRequestOperation.h"
+#import "CLLocation+measuring.h"
 
 @interface M5FoursquareClient ()
 
@@ -15,6 +16,7 @@
 
 -(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories;
 -(NSArray *)flattenCategories:(NSArray *)theCategories;
+-(double)areaCoveredByRegion:(MKCoordinateRegion)mapRegion;
 
 @end
 
@@ -86,6 +88,11 @@
         if(failure)
             failure(operation, error);
     }];
+}
+
+-(BOOL)mapRegionIsOfSearchableArea:(MKCoordinateRegion)mapRegion
+{
+    return [self areaCoveredByRegion:mapRegion] <= M5FoursquareMaxSearchAreaMeters;
 }
 
 -(void)getVenuesOfCategory:(NSString *)categoryID inMapRegion:(MKCoordinateRegion)mapRegion completion:(void (^)(NSArray *))completion failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
@@ -171,6 +178,23 @@
     }
     
     return nil;
+}
+
+-(double)areaCoveredByRegion:(MKCoordinateRegion)mapRegion
+{
+    CLLocationCoordinate2D northEastCorner, southEastCorner, southWestCorner;
+    northEastCorner.latitude  = mapRegion.center.latitude  + (mapRegion.span.latitudeDelta  / 2.0);
+    northEastCorner.longitude = mapRegion.center.longitude + (mapRegion.span.longitudeDelta / 2.0);
+    southWestCorner.latitude  = mapRegion.center.latitude  - (mapRegion.span.latitudeDelta  / 2.0);
+    southWestCorner.longitude = mapRegion.center.longitude - (mapRegion.span.longitudeDelta / 2.0);
+    
+    southEastCorner.latitude = southWestCorner.latitude;
+    southEastCorner.longitude = northEastCorner.longitude;
+    
+    CLLocationDistance height = [CLLocation distanceFromCoordinate:northEastCorner toCoordinate:southEastCorner];
+    CLLocationDistance width = [CLLocation distanceFromCoordinate:southWestCorner toCoordinate:southEastCorner];
+    
+    return width * height;
 }
 
 @end

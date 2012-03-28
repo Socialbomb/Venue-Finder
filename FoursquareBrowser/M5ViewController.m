@@ -25,6 +25,8 @@ typedef enum {
 
 @property (weak, nonatomic) IBOutlet UILabel *categoryName;
 @property (weak, nonatomic) IBOutlet UIView *refreshContainer;
+@property (weak, nonatomic) IBOutlet UIButton *refreshButton;
+@property (weak, nonatomic) IBOutlet UILabel *tooBigLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UILabel *currentCategoryName;
 
@@ -34,8 +36,8 @@ typedef enum {
 -(void)loadCategories;
 -(void)refreshVenues;
 
--(void)showRefreshButton;
--(void)hideRefreshButton;
+-(void)showRefreshArea;
+-(void)hideRefreshArea;
 
 -(void)removeAllAnnotations;
 
@@ -48,6 +50,8 @@ typedef enum {
 @synthesize currentCategoryName;
 @synthesize categoryName;
 @synthesize refreshContainer;
+@synthesize refreshButton;
+@synthesize tooBigLabel;
 
 #pragma mark - View Lifecycle
 
@@ -74,6 +78,8 @@ typedef enum {
     [self setRefreshContainer:nil];
     [self setMapView:nil];
     [self setCurrentCategoryName:nil];
+    [self setRefreshButton:nil];
+    [self setTooBigLabel:nil];
     [super viewDidUnload];
 }
 
@@ -98,7 +104,8 @@ typedef enum {
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-    [self showRefreshButton];
+    if(flattenedCategories)
+        [self showRefreshArea];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id<MKAnnotation>)annotation
@@ -149,8 +156,7 @@ typedef enum {
         flattenedCategories = theCategories;
         
         [self hideAllHUDsFromView];
-        
-        [self refreshVenues];
+        [self showRefreshArea];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self hideAllHUDsFromView];
         
@@ -171,7 +177,7 @@ typedef enum {
                                                inMapRegion:mapView.region
                                                 completion:^(NSArray *venues) {
                                                     [self hideAllHUDsFromView];
-                                                    [self hideRefreshButton];
+                                                    [self hideRefreshArea];
                                                     
                                                     [self removeAllAnnotations];
                                                     
@@ -204,7 +210,8 @@ typedef enum {
         
         currentCategory = category;
         
-        [self refreshVenues];
+        if([[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region])
+            [self refreshVenues];
     }];
 }
 
@@ -215,10 +222,8 @@ typedef enum {
 
 #pragma mark - Utilities
 
--(void)showRefreshButton
+-(void)showRefreshArea
 {
-    if(refreshContainer.alpha == 1) return;
-    
     [UIView animateWithDuration:0.25
                           delay:0
                         options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
@@ -227,13 +232,15 @@ typedef enum {
                          CGRect newFrame = refreshContainer.frame;
                          newFrame.origin.y = self.view.frame.size.height - newFrame.size.height;
                          refreshContainer.frame = newFrame;
+                         
+                         BOOL canSearch = [[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region];
+                         refreshButton.alpha = canSearch ? 1 : 0;
+                         tooBigLabel.alpha = canSearch ? 0 : 1;
                      } completion:NULL];
 }
 
--(void)hideRefreshButton
+-(void)hideRefreshArea
 {
-    if(refreshContainer.alpha == 0) return;
-    
     [UIView animateWithDuration:0.25
                           delay:0
                         options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState

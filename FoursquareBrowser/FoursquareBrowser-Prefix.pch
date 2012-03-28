@@ -20,3 +20,4 @@
 
 #define M5FoursquareAPITimeout 10
 #define M5PreferredCategoryIconSize 64
+#define M5FoursquareMaxSearchAreaMeters 10000000000

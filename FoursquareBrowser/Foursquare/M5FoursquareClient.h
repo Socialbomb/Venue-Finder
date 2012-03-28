@@ -21,6 +21,8 @@
 -(void)getVenueCategoriesWithCompletion:(void (^)(NSArray *categories))completion
                                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+-(BOOL)mapRegionIsOfSearchableArea:(MKCoordinateRegion)mapRegion;
+
 -(void)getVenuesOfCategory:(NSString *)categoryID
                inMapRegion:(MKCoordinateRegion)mapRegion
                 completion:(void (^)(NSArray *venues))completion
