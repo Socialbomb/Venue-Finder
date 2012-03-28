@@ -35,6 +35,7 @@
     self = [super initWithNibName:@"M5CategoriesController" bundle:nil];
     if (self) {
         categories = theCategories;
+        blankImage = [UIImage imageNamed:@"blank.png"];
     }
     return self;
 }
@@ -121,7 +122,7 @@
     else
         category = [categories objectAtIndex:indexPath.row];
     
-    [cell.imageView setImageWithURL:category.iconURL placeholderImage:[UIImage imageNamed:@"blank.png"]];
+    [cell.imageView setImageWithURL:category.iconURL placeholderImage:blankImage];
 }
 
 -(void)tableView:(UITableView *)theTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
