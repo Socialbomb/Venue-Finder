@@ -36,6 +36,7 @@
 		BD8B2382151A6BFE00EA2615 /* M5CategoriesController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD8B2380151A6BFE00EA2615 /* M5CategoriesController.xib */; };
 		BD8B2385151A77B700EA2615 /* M5Venue.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8B2384151A77B700EA2615 /* M5Venue.m */; };
 		BD8B2387151A784C00EA2615 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD8B2386151A784C00EA2615 /* CoreLocation.framework */; };
+		BD912AB21524C9EA0097A59F /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = BD912AB11524C9EA0097A59F /* SBTableAlert.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BDCAAF6F1523703D00E35CD8 /* CLLocation+measuring.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */; };
 		BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7B15237C2000E35CD8 /* blank.png */; };
 		BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7C15237C2000E35CD8 /* blank@2x.png */; };
@@ -99,6 +100,8 @@
 		BD8B2383151A77B700EA2615 /* M5Venue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5Venue.h; sourceTree = "<group>"; };
 		BD8B2384151A77B700EA2615 /* M5Venue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5Venue.m; sourceTree = "<group>"; };
 		BD8B2386151A784C00EA2615 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		BD912AB01524C9EA0097A59F /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBTableAlert.h; sourceTree = "<group>"; };
+		BD912AB11524C9EA0097A59F /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBTableAlert.m; sourceTree = "<group>"; };
 		BDCAAF6D1523702900E35CD8 /* CLLocation+measuring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CLLocation+measuring.h"; sourceTree = "<group>"; };
 		BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+measuring.m"; sourceTree = "<group>"; };
 		BDCAAF701523705800E35CD8 /* CLUtilsDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLUtilsDefines.h; sourceTree = "<group>"; };
@@ -132,6 +135,7 @@
 		BD23D199151A3D5B00880922 = {
 			isa = PBXGroup;
 			children = (
+				BD912AAF1524C9C80097A59F /* SBTableAlert */,
 				BDCAAF6B1523701B00E35CD8 /* CoreLocationUtils */,
 				BD8B2364151A5F3700EA2615 /* MBProgressHUD */,
 				BD23D1C5151A3F4300880922 /* AFNetworking */,
@@ -246,6 +250,15 @@
 				BD8B2367151A5F5200EA2615 /* MBProgressHUD.m */,
 			);
 			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		BD912AAF1524C9C80097A59F /* SBTableAlert */ = {
+			isa = PBXGroup;
+			children = (
+				BD912AB01524C9EA0097A59F /* SBTableAlert.h */,
+				BD912AB11524C9EA0097A59F /* SBTableAlert.m */,
+			);
+			path = SBTableAlert;
 			sourceTree = "<group>";
 		};
 		BDCAAF6B1523701B00E35CD8 /* CoreLocationUtils */ = {
@@ -368,6 +381,7 @@
 				BD8B2385151A77B700EA2615 /* M5Venue.m in Sources */,
 				BD27F3B815226C2F008B874B /* M5VenueViewController.m in Sources */,
 				BDCAAF6F1523703D00E35CD8 /* CLLocation+measuring.m in Sources */,
+				BD912AB21524C9EA0097A59F /* SBTableAlert.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
