@@ -7,6 +7,7 @@
 //
 
 #import <MapKit/MapKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "CLLocation+measuring.h"
 #import "CLPlacemark+Utils.h"
 #import "SBTableAlert.h"
@@ -33,18 +34,27 @@ typedef enum {
     
     UIAlertView *goAlert;
     NSArray *placemarks;
+    
+    BOOL mapIsCurled;
 }
 
+@property (weak, nonatomic) IBOutlet UIView *curlContainer;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UILabel *currentCategoryName;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
+@property (strong, nonatomic) IBOutlet UIView *pageCurlView;
+@property (weak, nonatomic) IBOutlet UILabel *categoriesDateLabel;
 
 -(IBAction)categoryButtonTapped:(id)sender;
 -(IBAction)refreshButtonTapped:(id)sender;
 -(IBAction)goButtonTapped:(id)sender;
+-(IBAction)mapTypeTapped:(UISegmentedControl *)sender;
+-(IBAction)reloadCategoriesTapped:(id)sender;
+-(IBAction)pageCurlButtonTapped:(UIBarButtonItem *)sender;
+-(IBAction)curlDismissalButtonTapped:(id)sender;
 
--(void)loadCategories;
+-(void)loadCategoriesIgnoringCache:(BOOL)ignoreCache;
 -(void)refreshVenues;
 -(void)setCategoryLabelFromCategory:(M5VenueCategory *)category;
 
@@ -55,15 +65,23 @@ typedef enum {
 -(CLRegion *)CLRegionWithMapRegion:(MKCoordinateRegion)region;
 -(void)goToPlacemark:(CLPlacemark *)placemark;
 
+-(void)curlMap;
+-(void)uncurlMap;
+
+-(NSString *)stringWithShortTimeSince:(NSDate *)date;
+
 @end
 
 
 @implementation M5ViewController
 
+@synthesize curlContainer;
 @synthesize mapView;
 @synthesize currentCategoryName;
 @synthesize toolbar;
 @synthesize refreshButton;
+@synthesize pageCurlView;
+@synthesize categoriesDateLabel;
 
 #pragma mark - View Lifecycle
 
@@ -85,6 +103,8 @@ typedef enum {
     NSMutableArray *toolbarItems = [toolbar.items mutableCopy];
     [toolbarItems insertObject:userTrackingButton atIndex:0];
     toolbar.items = toolbarItems;
+    
+    pageCurlView.backgroundColor = [UIColor underPageBackgroundColor];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -94,7 +114,7 @@ typedef enum {
     if(!didAppear) {
         // First appearance. Find the user and load categories        
         mapView.userTrackingMode = MKUserTrackingModeFollow;
-        [self loadCategories];
+        [self loadCategoriesIgnoringCache:NO];
     }
     
     didAppear = YES;
@@ -106,6 +126,9 @@ typedef enum {
     [self setCurrentCategoryName:nil];
     [self setToolbar:nil];
     [self setRefreshButton:nil];
+    [self setPageCurlView:nil];
+    [self setCategoriesDateLabel:nil];
+    [self setCurlContainer:nil];
     [super viewDidUnload];
 }
 
@@ -116,17 +139,26 @@ typedef enum {
 
 #pragma mark - Interaction
 
--(IBAction)categoryButtonTapped:(id)sender {
+-(IBAction)categoryButtonTapped:(id)sender
+{
+    [self uncurlMap];
+    
     M5CategoriesController *categoriesController = [[M5CategoriesController alloc] initWithCategories:flattenedCategories];
     categoriesController.delegate = self;
     [self presentModalViewController:categoriesController animated:YES];
 }
 
--(IBAction)refreshButtonTapped:(id)sender {
+-(IBAction)refreshButtonTapped:(id)sender
+{
+    [self uncurlMap];
+    
     [self refreshVenues];
 }
 
--(IBAction)goButtonTapped:(id)sender {
+-(IBAction)goButtonTapped:(id)sender
+{
+    [self uncurlMap];
+    
     currentAlert = M5AlertGoToLocation;
     
     goAlert = [[UIAlertView alloc] initWithTitle:@"Where to, mister?" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Allons-y!", nil];
@@ -140,7 +172,84 @@ typedef enum {
     [goAlert show];
 }
 
+-(IBAction)mapTypeTapped:(UISegmentedControl *)sender
+{
+    MKMapType newType;
+    if(sender.selectedSegmentIndex == 0) newType = MKMapTypeStandard;
+    else if(sender.selectedSegmentIndex == 1) newType = MKMapTypeSatellite;
+    else newType = MKMapTypeHybrid;
+    
+    if(mapView.mapType != newType) {
+        [self uncurlMap];
+        mapView.mapType = newType;
+    }
+}
+
+-(IBAction)reloadCategoriesTapped:(id)sender
+{
+    [self uncurlMap];
+    [self loadCategoriesIgnoringCache:YES];
+}
+
+-(IBAction)pageCurlButtonTapped:(UIBarButtonItem *)sender
+{
+    if(mapIsCurled)
+        [self uncurlMap];
+    else
+        [self curlMap];
+}
+
+-(IBAction)curlDismissalButtonTapped:(id)sender
+{
+    [self uncurlMap];
+}
+
+-(void)curlMap
+{
+    if(mapIsCurled)
+        return;
+    
+    NSString *timeAgo = [self stringWithShortTimeSince:[M5FoursquareClient sharedClient].cachedCategoriesDate];
+    categoriesDateLabel.text = [NSString stringWithFormat:@"Categories last updated %@", timeAgo];
+    
+    CATransition *animation = [CATransition animation];
+    [animation setDuration:0.4];
+    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+    animation.type = @"pageCurl";
+    animation.fillMode = kCAFillModeForwards;
+    animation.endProgress = 0.6;
+    [animation setRemovedOnCompletion:NO];
+    [curlContainer.layer addAnimation:animation forKey:@"pageCurlAnimation"];  
+    [curlContainer addSubview:pageCurlView];
+    
+    mapIsCurled = YES;
+}
+
+-(void)uncurlMap
+{
+    if(!mapIsCurled)
+        return;
+    
+    CATransition *animation = [CATransition animation];
+    [animation setDuration:0.4];
+    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+    animation.type = @"pageUnCurl";
+    animation.fillMode = kCAFillModeForwards;
+    animation.startProgress = 0.4;
+    [animation setRemovedOnCompletion:NO];
+    [curlContainer.layer addAnimation:animation forKey:@"pageUnCurlAnimation"];  
+    [pageCurlView removeFromSuperview];
+    
+    mapIsCurled = NO;
+}
+
 #pragma mark - MKMapViewDelegate
+
+-(void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated
+{
+    // This may have been a tap on the user tracking button in the toolbar; unfurl the map just in case
+    [self uncurlMap];
+}
 
 -(void)mapView:(MKMapView *)theMapView regionDidChangeAnimated:(BOOL)animated
 {
@@ -190,7 +299,7 @@ typedef enum {
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if(currentAlert == M5AlertCategoryError) {
-        [self loadCategories];
+        [self loadCategoriesIgnoringCache:NO];
     }
     else if(currentAlert == M5AlertGoToLocation) {
         if(buttonIndex != alertView.cancelButtonIndex) {
@@ -253,10 +362,14 @@ typedef enum {
         currentCategoryName.text = category.name;
 }
 
--(void)loadCategories
+-(void)loadCategoriesIgnoringCache:(BOOL)ignoreCache
 {
     [self showHUDFromViewWithText:@"Loading" details:@"fetching categories" dimScreen:YES];
-    [[M5FoursquareClient sharedClient] getVenueCategoriesWithCompletion:^(NSArray *theCategories) {
+    [[M5FoursquareClient sharedClient] getVenueCategoriesIgnoringCache:ignoreCache completion:^(NSArray *theCategories) {
+        currentCategory = nil;
+        [self setCategoryLabelFromCategory:nil];
+        [self setMapVenues:nil];
+        
         flattenedCategories = theCategories;
         
         [self hideAllHUDsFromView];
@@ -394,6 +507,28 @@ typedef enum {
     M5PlacemarkAnnotation *annotation = [[M5PlacemarkAnnotation alloc] initWithPlacemark:placemark];
     [mapView addAnnotation:annotation];
     [mapView selectAnnotation:annotation animated:YES];
+}
+
+-(NSString *)stringWithShortTimeSince:(NSDate *)date
+{
+    int now = [[NSDate date] timeIntervalSince1970];
+    int then = [date timeIntervalSince1970];
+    
+    int diff = MAX(1, now - then);
+    
+    if( diff < 60 )
+        return @"seconds ago";
+    else if(diff < 60 * 60 ) {
+        int mins = diff / 60.0;
+        return [NSString stringWithFormat:@"%i minute%@ ago", mins, mins > 1 ? @"s" : @""];
+    }
+    else if(diff < 60 * 60 * 24) {
+        int hrs = diff / (60.0 * 60.0);
+        return [NSString stringWithFormat:@"%i hour%@ ago", hrs, hrs > 1 ? @"s" : @""];
+    }
+    
+    int days = diff / (60.0 * 60.0 * 24.0);
+    return [NSString stringWithFormat:@"%i day%@ ago", days, days > 1 ? @"s" : @""];
 }
 
 @end

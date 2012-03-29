@@ -39,6 +39,7 @@
 		BD912AB21524C9EA0097A59F /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = BD912AB11524C9EA0097A59F /* SBTableAlert.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BD912AB51524E5CF0097A59F /* M5PlacemarkAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = BD912AB41524E5CF0097A59F /* M5PlacemarkAnnotation.m */; };
 		BD912AB81524EAF20097A59F /* CLPlacemark+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD912AB71524EAF20097A59F /* CLPlacemark+Utils.m */; };
+		BD912AC81525131A0097A59F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD912AC71525131A0097A59F /* QuartzCore.framework */; };
 		BDCAAF6F1523703D00E35CD8 /* CLLocation+measuring.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */; };
 		BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7B15237C2000E35CD8 /* blank.png */; };
 		BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7C15237C2000E35CD8 /* blank@2x.png */; };
@@ -108,6 +109,7 @@
 		BD912AB41524E5CF0097A59F /* M5PlacemarkAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5PlacemarkAnnotation.m; sourceTree = "<group>"; };
 		BD912AB61524EAF20097A59F /* CLPlacemark+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLPlacemark+Utils.h"; sourceTree = "<group>"; };
 		BD912AB71524EAF20097A59F /* CLPlacemark+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLPlacemark+Utils.m"; sourceTree = "<group>"; };
+		BD912AC71525131A0097A59F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BDCAAF6D1523702900E35CD8 /* CLLocation+measuring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CLLocation+measuring.h"; sourceTree = "<group>"; };
 		BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+measuring.m"; sourceTree = "<group>"; };
 		BDCAAF701523705800E35CD8 /* CLUtilsDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLUtilsDefines.h; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD912AC81525131A0097A59F /* QuartzCore.framework in Frameworks */,
 				BDCAAFB41523C0A600E35CD8 /* libz.dylib in Frameworks */,
 				BD8B2387151A784C00EA2615 /* CoreLocation.framework in Frameworks */,
 				BD8B236E151A624C00EA2615 /* MapKit.framework in Frameworks */,
@@ -163,6 +166,7 @@
 		BD23D1A7151A3D5B00880922 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BD912AC71525131A0097A59F /* QuartzCore.framework */,
 				BDCAAFB31523C0A600E35CD8 /* libz.dylib */,
 				BD8B2386151A784C00EA2615 /* CoreLocation.framework */,
 				BD8B236D151A624C00EA2615 /* MapKit.framework */,

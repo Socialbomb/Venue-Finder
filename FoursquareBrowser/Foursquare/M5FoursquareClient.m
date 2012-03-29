@@ -13,10 +13,15 @@
 static const int M5FoursquareAPITimeout = 10;
 static const double M5FoursquareMaxSearchAreaMeters = 10000000000;  // The Foursquare docs say the max searchable region is approximately 10,000 sq km
 
+static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
 
 @interface M5FoursquareClient ()
 
 @property (nonatomic, strong, readwrite) NSArray *venueCategories;
+@property (nonatomic, strong, readwrite) NSDate *cachedCategoriesDate;
+
+@property (nonatomic, readonly) NSString *cachedCategoriesPath;
+@property (nonatomic, strong) NSData *cachedCategoriesResponse;
 
 -(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories;
 -(NSArray *)flattenCategories:(NSArray *)theCategories;
@@ -76,23 +81,43 @@ static const double M5FoursquareMaxSearchAreaMeters = 10000000000;  // The Fours
 
 #pragma mark - API calls
 
--(void)getVenueCategoriesWithCompletion:(void (^)(NSArray *))completion failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+-(void)handleCategoriesResponse:(NSDictionary *)JSON completion:(void (^)(NSArray *))completion
 {
-    [self getPath:@"venues/categories" parameters:nil success:^(AFHTTPRequestOperation *operation, id JSON) {
-        NSArray *categoryDicts = [[JSON objectForKey:@"response"] objectForKey:@"categories"];
+    NSArray *categoryDicts = [[JSON objectForKey:@"response"] objectForKey:@"categories"];
+    
+    NSMutableArray *categories = [NSMutableArray arrayWithCapacity:categoryDicts.count];
+    for(NSDictionary *categoryDict in categoryDicts)
+        [categories addObject:[[M5VenueCategory alloc] initWithDictionary:categoryDict]];
+    
+    self.venueCategories = [self flattenCategories:categories];
+    
+    if(completion)
+        completion(self.venueCategories);
+}
 
-        NSMutableArray *categories = [NSMutableArray arrayWithCapacity:categoryDicts.count];
-        for(NSDictionary *categoryDict in categoryDicts)
-            [categories addObject:[[M5VenueCategory alloc] initWithDictionary:categoryDict]];
-        
-        self.venueCategories = [self flattenCategories:categories];
-        
-        if(completion)
-            completion(self.venueCategories);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if(failure)
-            failure(operation, error);
-    }];
+-(void)getVenueCategoriesIgnoringCache:(BOOL)ignoreCache completion:(void (^)(NSArray *))completion failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+{
+    if(ignoreCache || !self.cachedCategoriesDate)
+    {
+        [self getPath:@"venues/categories" parameters:nil success:^(AFHTTPRequestOperation *operation, id JSON) {
+            self.cachedCategoriesResponse = operation.responseData;
+            [self handleCategoriesResponse:JSON completion:completion];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            if(failure)
+                failure(operation, error);
+        }];
+    }
+    else {
+        NSError *error;
+        NSDictionary *cachedResponse = [NSJSONSerialization JSONObjectWithData:self.cachedCategoriesResponse options:0 error:&error];
+        if(!cachedResponse) {
+            NSLog(@"Error reading cached venue categories: %@. Reloading from network.", error);
+            [self getVenueCategoriesIgnoringCache:YES completion:completion failure:failure];
+        }
+        else {
+            [self handleCategoriesResponse:cachedResponse completion:completion];
+        }
+    }
 }
 
 -(BOOL)mapRegionIsOfSearchableArea:(MKCoordinateRegion)mapRegion
@@ -205,6 +230,38 @@ static const double M5FoursquareMaxSearchAreaMeters = 10000000000;  // The Fours
     CLLocationDistance width = [CLLocation distanceFromCoordinate:southWestCorner toCoordinate:southEastCorner];
     
     return width * height;
+}
+
+-(void)setCachedCategoriesDate:(NSDate *)cachedCategoriesDate
+{
+    [[NSUserDefaults standardUserDefaults] setObject:cachedCategoriesDate forKey:M5CachedCategoriesDateKey];
+}
+
+-(NSDate *)cachedCategoriesDate
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:M5CachedCategoriesDateKey];
+}
+
+-(NSString *)cachedCategoriesPath
+{
+    NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    return [[cachePaths objectAtIndex:0] stringByAppendingPathComponent:@"foursquare-categories.json"];
+}
+
+-(void)setCachedCategoriesResponse:(NSData *)cachedCategoriesResponse
+{
+    if([[NSFileManager defaultManager] createFileAtPath:self.cachedCategoriesPath
+                                            contents:cachedCategoriesResponse
+                                          attributes:nil])
+    {
+        self.cachedCategoriesDate = [NSDate date];
+    }
+}
+
+-(NSData *)cachedCategoriesResponse
+{
+    NSData *contents = [[NSFileManager defaultManager] contentsAtPath:self.cachedCategoriesPath];
+    return contents;
 }
 
 @end

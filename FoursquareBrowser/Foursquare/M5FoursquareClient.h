@@ -15,11 +15,14 @@
 
 +(M5FoursquareClient *)sharedClient;
 
+@property (nonatomic, strong, readonly) NSDate *cachedCategoriesDate;
 @property (nonatomic, strong, readonly) NSArray *venueCategories;
+
 -(M5VenueCategory *)venueCategoryForID:(NSString *)venueCategoryID;
 
--(void)getVenueCategoriesWithCompletion:(void (^)(NSArray *categories))completion
-                                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+-(void)getVenueCategoriesIgnoringCache:(BOOL)ignoreCache
+                            completion:(void (^)(NSArray *categories))completion
+                               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 -(BOOL)mapRegionIsOfSearchableArea:(MKCoordinateRegion)mapRegion;
 
