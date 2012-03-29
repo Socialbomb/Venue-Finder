@@ -87,11 +87,12 @@ typedef enum {
     toolbar.items = toolbarItems;
 }
 
--(void)viewDidAppear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     
     if(!didAppear) {
+        // First appearance. Find the user and load categories        
         mapView.userTrackingMode = MKUserTrackingModeFollow;
         [self loadCategories];
     }
