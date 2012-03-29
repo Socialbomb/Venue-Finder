@@ -26,18 +26,8 @@
     if(self) {
         self.placemark = thePlacemark;
         
-        if(placemark.name || placemark.streetAddress) {
-            theTitle = placemark.name ? placemark.name : placemark.streetAddress;
-            theSubtitle = [NSString stringWithFormat:@"%@, %@, %@", placemark.locality, placemark.administrativeArea, placemark.ISOcountryCode];
-        }
-        else if(placemark.locality) {
-            theTitle = [NSString stringWithFormat:@"%@", placemark.locality];
-            theSubtitle = [NSString stringWithFormat:@"%@, %@", placemark.administrativeArea, placemark.ISOcountryCode];
-        }
-        else {
-            theTitle = placemark.administrativeArea;
-            theSubtitle = placemark.ISOcountryCode;
-        }
+        theTitle = placemark.friendlyTitle;
+        theSubtitle = placemark.friendlySubtitle;
     }
     
     return self;

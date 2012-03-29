@@ -350,19 +350,8 @@ typedef enum {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
     
     CLPlacemark *placemark = [placemarks objectAtIndex:indexPath.row];
-    
-    if(placemark.name || placemark.streetAddress) {
-        cell.textLabel.text = placemark.name ? placemark.name : placemark.streetAddress;
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@, %@", placemark.locality, placemark.administrativeArea, placemark.country];
-    }
-    else if(placemark.locality) {
-        cell.textLabel.text = placemark.locality;
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@", placemark.administrativeArea, placemark.country];
-    }
-    else {
-        cell.textLabel.text = placemark.administrativeArea;
-        cell.detailTextLabel.text = placemark.country;
-    }
+    cell.textLabel.text = placemark.friendlyTitle;
+    cell.detailTextLabel.text = placemark.friendlySubtitle;
     
     return cell;
 }

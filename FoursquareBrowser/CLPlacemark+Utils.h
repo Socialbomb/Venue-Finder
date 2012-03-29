@@ -11,5 +11,7 @@
 @interface CLPlacemark (Utils)
 
 @property (nonatomic, readonly) NSString *streetAddress;
+@property (nonatomic, readonly) NSString *friendlyTitle;
+@property (nonatomic, readonly) NSString *friendlySubtitle;
 
 @end
