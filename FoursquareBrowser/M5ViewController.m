@@ -158,8 +158,6 @@ typedef enum {
             UIButton *accessory = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
             pin.rightCalloutAccessoryView = accessory;
         }
-        else
-            pin.annotation = annotation;
         
         return pin;
     }
@@ -171,8 +169,6 @@ typedef enum {
             pin.animatesDrop = YES;
             pin.canShowCallout = YES;
         }
-        else
-            pin.annotation = annotation;
         
         return pin;
     }
