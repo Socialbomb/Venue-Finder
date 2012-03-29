@@ -8,11 +8,13 @@
 
 #import <MapKit/MapKit.h>
 #import "CLLocation+measuring.h"
+#import "CLPlacemark+Utils.h"
 #import "SBTableAlert.h"
 #import "M5ViewController.h"
 #import "M5FoursquareClient.h"
 #import "M5CategoriesController.h"
 #import "M5VenueViewController.h"
+#import "M5PlacemarkAnnotation.h"
 
 typedef enum {
     M5AlertCategoryError,
@@ -49,7 +51,6 @@ typedef enum {
 -(void)enableRefreshButtonAppropriately;
 
 -(void)setMapVenues:(NSArray *)venues;
--(void)removeAllAnnotations;
 
 -(CLRegion *)CLRegionWithMapRegion:(MKCoordinateRegion)region;
 -(void)goToPlacemark:(CLPlacemark *)placemark;
@@ -156,6 +157,19 @@ typedef enum {
             
             UIButton *accessory = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
             pin.rightCalloutAccessoryView = accessory;
+        }
+        else
+            pin.annotation = annotation;
+        
+        return pin;
+    }
+    else if([annotation isKindOfClass:[M5PlacemarkAnnotation class]]) {
+        MKPinAnnotationView *pin = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"PlacePin"];
+        if(!pin) {
+            pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"PlacePin"];
+            pin.pinColor = MKPinAnnotationColorPurple;
+            pin.animatesDrop = YES;
+            pin.canShowCallout = YES;
         }
         else
             pin.annotation = annotation;
@@ -337,8 +351,8 @@ typedef enum {
     
     CLPlacemark *placemark = [placemarks objectAtIndex:indexPath.row];
     
-    if(placemark.name || placemark.thoroughfare) {
-        cell.textLabel.text = placemark.name ? placemark.name : placemark.thoroughfare;
+    if(placemark.name || placemark.streetAddress) {
+        cell.textLabel.text = placemark.name ? placemark.name : placemark.streetAddress;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@, %@", placemark.locality, placemark.administrativeArea, placemark.country];
     }
     else if(placemark.locality) {
@@ -366,14 +380,6 @@ typedef enum {
     refreshButton.enabled = [[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region];
 }
 
--(void)removeAllAnnotations
-{
-    for(id<MKAnnotation> annotation in mapView.annotations) {
-        if([annotation isKindOfClass:[M5Venue class]])
-            [mapView removeAnnotation:annotation];
-    }
-}
-
 -(CLRegion *)CLRegionWithMapRegion:(MKCoordinateRegion)region
 {
     CLLocationCoordinate2D northEastCorner, southEastCorner;
@@ -393,6 +399,15 @@ typedef enum {
         [mapView setRegion:MKCoordinateRegionMakeWithDistance(placemark.region.center, placemark.region.radius, placemark.region.radius) animated:YES];
     else
         [mapView setRegion:MKCoordinateRegionMakeWithDistance(placemark.location.coordinate, 1000, 1000) animated:YES];
+    
+    for(id<MKAnnotation> annotation in mapView.annotations) {
+        if([annotation isKindOfClass:[M5PlacemarkAnnotation class]])
+            [mapView removeAnnotation:annotation];
+    }
+    
+    M5PlacemarkAnnotation *annotation = [[M5PlacemarkAnnotation alloc] initWithPlacemark:placemark];
+    [mapView addAnnotation:annotation];
+    [mapView selectAnnotation:annotation animated:YES];
 }
 
 @end
