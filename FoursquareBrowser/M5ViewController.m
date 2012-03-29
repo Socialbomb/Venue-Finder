@@ -21,6 +21,10 @@ typedef enum {
     NSArray *flattenedCategories;
     M5VenueCategory *currentCategory;
     BOOL didAppear;
+    
+    BOOL viewAlreadyLoaded;
+    MKCoordinateRegion lastMapRegion;
+    NSArray *lastMapVenues;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *refreshContainer;
@@ -34,10 +38,12 @@ typedef enum {
 
 -(void)loadCategories;
 -(void)refreshVenues;
+-(void)setCategoryLabelFromCategory:(M5VenueCategory *)category;
 
 -(void)showRefreshArea;
 -(void)hideRefreshArea;
 
+-(void)setMapVenues:(NSArray *)venues;
 -(void)removeAllAnnotations;
 
 @end
@@ -56,6 +62,15 @@ typedef enum {
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if(viewAlreadyLoaded) {
+        // Our view got destroyed; restore the map region and category
+        [self setCategoryLabelFromCategory:currentCategory];
+        [self setMapVenues:lastMapVenues];
+        [mapView setRegion:lastMapRegion animated:NO];
+    }
+    
+    viewAlreadyLoaded = YES;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -99,10 +114,12 @@ typedef enum {
 
 #pragma mark - MKMapViewDelegate
 
--(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+-(void)mapView:(MKMapView *)theMapView regionDidChangeAnimated:(BOOL)animated
 {
     if(flattenedCategories)
         [self showRefreshArea];
+    
+    lastMapRegion = mapView.region;
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id<MKAnnotation>)annotation
@@ -146,6 +163,14 @@ typedef enum {
 
 #pragma mark - Guts
 
+-(void)setCategoryLabelFromCategory:(M5VenueCategory *)category
+{
+    if(!category)
+        currentCategoryName.text = @"All categories";
+    else
+        currentCategoryName.text = category.name;
+}
+
 -(void)loadCategories
 {
     [self showHUDFromViewWithText:@"Loading" details:@"fetching categories" dimScreen:YES];
@@ -176,10 +201,8 @@ typedef enum {
                                                     [self hideAllHUDsFromView];
                                                     [self hideRefreshArea];
                                                     
-                                                    [self removeAllAnnotations];
-                                                    
-                                                    for(M5Venue *venue in venues)
-                                                        [mapView addAnnotation:venue];
+                                                    [self setMapVenues:venues];
+                                                    lastMapVenues = venues;
                                                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                     [self hideAllHUDsFromView];
                                                     
@@ -192,15 +215,23 @@ typedef enum {
                                                 }];
 }
 
+-(void)setMapVenues:(NSArray *)venues
+{
+    for(id<MKAnnotation> annotation in mapView.annotations) {
+        if([annotation isKindOfClass:[M5Venue class]])
+            [mapView removeAnnotation:annotation];
+    }
+    
+    for(M5Venue *venue in venues)
+        [mapView addAnnotation:venue];
+}
+
 #pragma mark - M5CategoriesControllerDelegate
 
 -(void)categoriesController:(M5CategoriesController *)categoriesController didSelectCategory:(M5VenueCategory *)category
 {
-    if(!category)
-        currentCategoryName.text = @"All categories";
-    else
-        currentCategoryName.text = category.name;
-    
+    [self setCategoryLabelFromCategory:category];
+
     [categoriesController dismissViewControllerAnimated:YES completion:^{
         if(currentCategory == category)
             return;
