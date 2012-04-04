@@ -48,18 +48,15 @@
 
 +(NSString *)commaSeparateNonNullElementsOfArray:(NSArray *)strings
 {
-    NSArray *winners = [strings filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        return evaluatedObject != [NSNull null];
-    }]];
+    NSMutableString *s;
     
-    if(winners.count == 0)
-        return nil;
-    
-    NSMutableString *s = [NSMutableString string];
-    for(int i = 0; i < winners.count; i++) {
-        [s appendString:[winners objectAtIndex:i]];
-        if(i != winners.count - 1)
-            [s appendString:@", "];
+    for(NSString *string in strings) {
+        if((id)string != [NSNull null]) {
+            if(s)
+                [s appendFormat:@", %@", string];
+            else
+                s = [string mutableCopy];
+        }
     }
     
     return s;
