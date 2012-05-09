@@ -14,6 +14,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) M5ViewController *viewController;
+@property (strong, nonatomic) UINavigationController *navController;
 
 @end

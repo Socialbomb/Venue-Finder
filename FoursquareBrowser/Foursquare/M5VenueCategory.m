@@ -15,6 +15,7 @@ static const int M5PreferredCategoryIconSize = 64;
 @property (nonatomic, weak, readwrite) M5VenueCategory *parentCategory;
 @property (nonatomic, strong, readwrite) NSString *_id;
 @property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) NSString *pluralName;
 @property (nonatomic, assign, readwrite) uint alphabetizationRank;
 @property (nonatomic, strong, readwrite) NSArray *subcategories;
 @property (nonatomic, strong, readwrite) NSURL *iconURL;
@@ -23,7 +24,7 @@ static const int M5PreferredCategoryIconSize = 64;
 
 @implementation M5VenueCategory
 
-@synthesize name, _id, subcategories, iconURL, parentCategory, alphabetizationRank;
+@synthesize name, pluralName, _id, subcategories, iconURL, parentCategory, alphabetizationRank;
 
 -(id)initWithDictionary:(NSDictionary *)dictionary
 {
@@ -31,6 +32,7 @@ static const int M5PreferredCategoryIconSize = 64;
     if(self) {
         self._id = [dictionary objectForKey:@"id"];
         self.name = [dictionary objectForKey:@"name"];
+        self.pluralName = [dictionary objectForKey:@"pluralName"];
         
         // Convert name to ASCII to figure out how we should alphabetize it
         NSData *asciiNameData = [[self.name lowercaseString] dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];

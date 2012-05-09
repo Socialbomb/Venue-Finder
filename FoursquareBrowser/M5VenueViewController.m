@@ -77,11 +77,9 @@ typedef enum {
     NSArray *sectionTitles;
 }
 
-@property (weak, nonatomic) IBOutlet UINavigationItem *customNavItem;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
--(IBAction)doneButtonTapped:(id)sender;
--(IBAction)foursquareButtonTapped:(id)sender;
+-(void)foursquareButtonTapped:(id)sender;
 
 -(void)loadVenue;
 -(void)prepareData;
@@ -100,7 +98,6 @@ typedef enum {
 
 @implementation M5VenueViewController
 
-@synthesize customNavItem;
 @synthesize tableView;
 
 -(id)initWithAbbreviatedVenue:(M5Venue *)theAbbreviatedVenue
@@ -109,15 +106,17 @@ typedef enum {
     if (self) {
         abbreviatedVenue = theAbbreviatedVenue;
         sectionTitles = [NSArray arrayWithObjects:@"Location", @"General Info", @"Stats", @"Categories", @"Tags", @"Metadata", nil];
+        
+        self.navigationItem.title = abbreviatedVenue.name;
+        
+        UIButton *foursquareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        foursquareButton.frame = CGRectMake(0, 0, 30, 30);
+        [foursquareButton setImage:[UIImage imageNamed:@"foursquare-icon-36x36.png"] forState:UIControlStateNormal];
+        [foursquareButton addTarget:self action:@selector(foursquareButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:foursquareButton];
     }
     return self;
-}
-
--(void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    customNavItem.title = abbreviatedVenue.name;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -127,7 +126,6 @@ typedef enum {
 
 -(void)viewDidUnload
 {
-    [self setCustomNavItem:nil];
     [self setTableView:nil];
     [super viewDidUnload];
 }
@@ -139,13 +137,7 @@ typedef enum {
 
 #pragma mark - Interaction
 
--(IBAction)doneButtonTapped:(id)sender
-{
-    [[M5FoursquareClient sharedClient] cancelGetOfVenueID:abbreviatedVenue._id]; 
-    [self dismissModalViewControllerAnimated:YES];
-}
-
-- (IBAction)foursquareButtonTapped:(id)sender {
+- (void)foursquareButtonTapped:(id)sender {
     [[UIApplication sharedApplication] openURL:abbreviatedVenue.venueURL];
 }
 
@@ -186,10 +178,10 @@ typedef enum {
         [self hideAllHUDsFromView];
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Yikes!"
-                                                        message:@"There was an error loading venue details. Try again or hit Foursquare's site?"
+                                                        message:@"There was an error loading venue details. Try again, or visit the foursquare™ page?"
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:@"Retry", @"Web", nil];
+                                              otherButtonTitles:@"Retry", @"foursquare™ page", nil];
 
         [alert show];
     }];

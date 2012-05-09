@@ -47,6 +47,11 @@
 		BDCAAF961523A43600E35CD8 /* venuelocator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */; };
 		BDCAAFB01523C01700E35CD8 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */; };
 		BDCAAFB41523C0A600E35CD8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCAAFB31523C0A600E35CD8 /* libz.dylib */; };
+		BDFDE3E7155B15190063AEA4 /* foursquare-icon-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = BDFDE3E6155B15190063AEA4 /* foursquare-icon-36x36.png */; };
+		BDFDE3ED155B18B10063AEA4 /* 07-map-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = BDFDE3E9155B18B10063AEA4 /* 07-map-marker.png */; };
+		BDFDE3EE155B18B10063AEA4 /* 07-map-marker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDFDE3EA155B18B10063AEA4 /* 07-map-marker@2x.png */; };
+		BDFDE3EF155B18B10063AEA4 /* 44-shoebox.png in Resources */ = {isa = PBXBuildFile; fileRef = BDFDE3EB155B18B10063AEA4 /* 44-shoebox.png */; };
+		BDFDE3F0155B18B10063AEA4 /* 44-shoebox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDFDE3EC155B18B10063AEA4 /* 44-shoebox@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -120,6 +125,11 @@
 		BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		BDCAAFAF1523C01700E35CD8 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		BDCAAFB31523C0A600E35CD8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		BDFDE3E6155B15190063AEA4 /* foursquare-icon-36x36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "foursquare-icon-36x36.png"; sourceTree = "<group>"; };
+		BDFDE3E9155B18B10063AEA4 /* 07-map-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "07-map-marker.png"; sourceTree = "<group>"; };
+		BDFDE3EA155B18B10063AEA4 /* 07-map-marker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "07-map-marker@2x.png"; sourceTree = "<group>"; };
+		BDFDE3EB155B18B10063AEA4 /* 44-shoebox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "44-shoebox.png"; sourceTree = "<group>"; };
+		BDFDE3EC155B18B10063AEA4 /* 44-shoebox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "44-shoebox@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +302,11 @@
 				BDCAAF7C15237C2000E35CD8 /* blank@2x.png */,
 				BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */,
 				BDCAAF931523A43400E35CD8 /* venuelocator.png */,
+				BDFDE3E6155B15190063AEA4 /* foursquare-icon-36x36.png */,
+				BDFDE3E9155B18B10063AEA4 /* 07-map-marker.png */,
+				BDFDE3EA155B18B10063AEA4 /* 07-map-marker@2x.png */,
+				BDFDE3EB155B18B10063AEA4 /* 44-shoebox.png */,
+				BDFDE3EC155B18B10063AEA4 /* 44-shoebox@2x.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -364,6 +379,11 @@
 				BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */,
 				BDCAAF941523A43400E35CD8 /* venuelocator.png in Resources */,
 				BDCAAF961523A43600E35CD8 /* venuelocator@2x.png in Resources */,
+				BDFDE3E7155B15190063AEA4 /* foursquare-icon-36x36.png in Resources */,
+				BDFDE3ED155B18B10063AEA4 /* 07-map-marker.png in Resources */,
+				BDFDE3EE155B18B10063AEA4 /* 07-map-marker@2x.png in Resources */,
+				BDFDE3EF155B18B10063AEA4 /* 44-shoebox.png in Resources */,
+				BDFDE3F0155B18B10063AEA4 /* 44-shoebox@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

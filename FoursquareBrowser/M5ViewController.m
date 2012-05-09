@@ -41,12 +41,12 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UIView *curlContainer;
 @property (weak, nonatomic) IBOutlet UIView *mapContainer;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (weak, nonatomic) IBOutlet UILabel *currentCategoryName;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 @property (strong, nonatomic) IBOutlet UIView *pageCurlView;
 @property (weak, nonatomic) IBOutlet UILabel *categoriesDateLabel;
 @property (weak, nonatomic) IBOutlet UIButton *curlDismissalButton;
+@property (weak, nonatomic) IBOutlet UIButton *categoryButton;
 
 -(IBAction)categoryButtonTapped:(id)sender;
 -(IBAction)refreshButtonTapped:(id)sender;
@@ -80,14 +80,24 @@ typedef enum {
 @synthesize curlContainer;
 @synthesize mapContainer;
 @synthesize mapView;
-@synthesize currentCategoryName;
 @synthesize toolbar;
 @synthesize refreshButton;
 @synthesize pageCurlView;
 @synthesize categoriesDateLabel;
 @synthesize curlDismissalButton;
+@synthesize categoryButton;
 
 #pragma mark - View Lifecycle
+
+-(id)init
+{
+    self = [super initWithNibName:@"M5ViewController" bundle:nil];
+    if(self) {
+        self.title = @"Map";
+    }
+    
+    return self;
+}
 
 -(void)viewDidLoad
 {
@@ -122,12 +132,21 @@ typedef enum {
     }
     
     didAppear = YES;
+    
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if(self.navigationController.topViewController != self)
+        [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
 -(void)viewDidUnload
 {
     [self setMapView:nil];
-    [self setCurrentCategoryName:nil];
     [self setToolbar:nil];
     [self setRefreshButton:nil];
     [self setPageCurlView:nil];
@@ -135,6 +154,7 @@ typedef enum {
     [self setCurlContainer:nil];
     [self setMapContainer:nil];
     [self setCurlDismissalButton:nil];
+    [self setCategoryButton:nil];
     [super viewDidUnload];
 }
 
@@ -295,7 +315,7 @@ typedef enum {
     M5Venue *venue = (M5Venue *)view.annotation;
 
     M5VenueViewController *venueVC = [[M5VenueViewController alloc] initWithAbbreviatedVenue:venue];
-    [self presentModalViewController:venueVC animated:YES];
+    [self.navigationController pushViewController:venueVC animated:YES];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -361,9 +381,9 @@ typedef enum {
 -(void)setCategoryLabelFromCategory:(M5VenueCategory *)category
 {
     if(!category)
-        currentCategoryName.text = @"All categories";
+        [categoryButton setTitle:@"All categories" forState:UIControlStateNormal];
     else
-        currentCategoryName.text = category.name;
+        [categoryButton setTitle:category.pluralName forState:UIControlStateNormal];
 }
 
 -(void)loadCategoriesIgnoringCache:(BOOL)ignoreCache
