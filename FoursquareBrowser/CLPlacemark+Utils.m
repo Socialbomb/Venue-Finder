@@ -14,7 +14,10 @@
 
 -(NSString *)streetAddress
 {
-    if(self.subThoroughfare && self.thoroughfare)
+    NSString *fromDict = [self.addressDictionary objectForKey:@"Street"];
+    if(fromDict)
+        return fromDict;
+    else if(self.subThoroughfare && self.thoroughfare)
         return [NSString stringWithFormat:@"%@ %@", self.subThoroughfare, self.thoroughfare];
     else if(self.thoroughfare)
         return self.thoroughfare;
@@ -28,7 +31,13 @@
 {
     if(self.name)
         return self.name;
-    else if(self.streetAddress)
+    else {
+        NSArray *fromDict = [self.addressDictionary objectForKey:@"FormattedAddressLines"];
+        if(fromDict.count >= 1)
+            return [fromDict objectAtIndex:0];
+    }
+    
+    if(self.streetAddress)
         return self.streetAddress;
     else if(self.locality)
         return self.locality;
@@ -64,7 +73,11 @@
 
 -(NSString *)friendlySubtitle
 {
-    if(self.name || self.streetAddress)
+    NSArray *fromDict = [self.addressDictionary objectForKey:@"FormattedAddressLines"];
+    if(fromDict.count >= 2)
+        return [fromDict objectAtIndex:1];
+
+    else if(self.name || self.streetAddress)
     {
         return [CLPlacemark commaSeparateNonNullElementsOfArray:
                 [NSArray arrayWithObjects:
