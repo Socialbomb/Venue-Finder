@@ -13,6 +13,9 @@
     UISearchDisplayController *searchController;
     NSArray *filteredCategories;
     UIImage *blankImage;
+    
+    NSMutableArray *categoriesBySection;
+    NSArray *sectionIndexTitles;
 }
 
 -(IBAction)cancelButtonTapped:(id)sender;
@@ -38,6 +41,21 @@
     if (self) {
         categories = theCategories;
         blankImage = [UIImage imageNamed:@"blank.png"];
+        
+        sectionIndexTitles = [NSArray arrayWithObjects:
+                              UITableViewIndexSearch,  // Magic!
+                              @"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", 
+                              @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", 
+                              @"Y", @"Z", @"#", nil];
+        
+        categoriesBySection = [NSMutableArray arrayWithCapacity:27];
+        for(uint i = 0; i < 27; i++)
+            [categoriesBySection addObject:[NSMutableArray array]];
+        
+        for(M5VenueCategory *category in categories) {
+            NSMutableArray *sectionArray = [categoriesBySection objectAtIndex:category.alphabetizationRank];
+            [sectionArray addObject:category];
+        }
     }
     return self;
 }
@@ -50,6 +68,8 @@
     searchController.delegate = self;
     searchController.searchResultsDataSource = self;
     searchController.searchResultsDelegate = self;
+    
+    tableView.contentOffset = CGPointMake(0, searchController.searchBar.frame.size.height);
 }
 
 -(void)viewDidUnload
@@ -74,23 +94,21 @@
 
 -(M5VenueCategory *)categoryForIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)theTableView
 {
-    NSArray *dataSource = (theTableView == tableView) ? categories : filteredCategories;
-    return [dataSource objectAtIndex:indexPath.row];
+    if(theTableView == tableView)
+        return [[categoriesBySection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    return [filteredCategories objectAtIndex:indexPath.row];  // Search results
 }
 
 #pragma mark - UITableViewDataSource and UITableViewDelegate
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
 
 -(NSInteger)tableView:(UITableView *)theTableView numberOfRowsInSection:(NSInteger)section
 {
     if(theTableView == searchController.searchResultsTableView)
         return filteredCategories.count;
-    else
-        return categories.count;
+    else {
+        return [[categoriesBySection objectAtIndex:section] count];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)theTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -136,6 +154,41 @@
         M5VenueCategory *category = [self categoryForIndexPath:indexPath inTableView:theTableView];
         [UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"%@ - %@", category.name, category._id];
     }
+}
+
+#pragma mark Section stuff in the non-search result table
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)theTableView
+{
+    if(theTableView == tableView)
+        return 27;  // A-Z, #
+    
+    return 1;  // The search results view
+}
+
+-(NSInteger)tableView:(UITableView *)theTableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+    if(theTableView != tableView) {
+        // The search results table view
+        return NSNotFound;
+    }
+    
+    if(index == 0) {
+        // The search "section"
+        [tableView setContentOffset:CGPointZero animated:NO];
+        return NSNotFound;
+    }
+    
+    return index - 1;
+}
+
+-(NSArray *)sectionIndexTitlesForTableView:(UITableView *)theTableView
+{
+    if(theTableView == tableView)
+        return sectionIndexTitles;
+    
+    // No index in the search results view
+    return nil;
 }
 
 #pragma mark - UISearchDisplayControllerDelegate

@@ -200,7 +200,15 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
     NSMutableArray *flatCategories = [NSMutableArray array];
     [self addToFlatCategories:theCategories accumulator:flatCategories];
     
-    [flatCategories sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+    [flatCategories sortUsingComparator:^NSComparisonResult(M5VenueCategory *cat1, M5VenueCategory *cat2) {
+        if(cat1.alphabetizationRank < cat2.alphabetizationRank)
+            return NSOrderedAscending;
+        
+        if(cat1.alphabetizationRank > cat2.alphabetizationRank)
+            return NSOrderedDescending;
+        
+        return [cat1.name compare:cat2.name options:NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch];
+    }];
     
     return flatCategories;
 }

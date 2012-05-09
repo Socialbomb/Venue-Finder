@@ -15,6 +15,7 @@ static const int M5PreferredCategoryIconSize = 64;
 @property (nonatomic, weak, readwrite) M5VenueCategory *parentCategory;
 @property (nonatomic, strong, readwrite) NSString *_id;
 @property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, assign, readwrite) uint alphabetizationRank;
 @property (nonatomic, strong, readwrite) NSArray *subcategories;
 @property (nonatomic, strong, readwrite) NSURL *iconURL;
 
@@ -22,7 +23,7 @@ static const int M5PreferredCategoryIconSize = 64;
 
 @implementation M5VenueCategory
 
-@synthesize name, _id, subcategories, iconURL, parentCategory;
+@synthesize name, _id, subcategories, iconURL, parentCategory, alphabetizationRank;
 
 -(id)initWithDictionary:(NSDictionary *)dictionary
 {
@@ -30,6 +31,33 @@ static const int M5PreferredCategoryIconSize = 64;
     if(self) {
         self._id = [dictionary objectForKey:@"id"];
         self.name = [dictionary objectForKey:@"name"];
+        
+        // Convert name to ASCII to figure out how we should alphabetize it
+        NSData *asciiNameData = [[self.name lowercaseString] dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        NSString *asciifiedName = [[NSString alloc] initWithData:asciiNameData encoding:NSASCIIStringEncoding];
+        NSCharacterSet *letterCharSet = [NSCharacterSet letterCharacterSet];
+        NSCharacterSet *whitespaceCharSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+        
+        char firstLetter = 0;
+        
+        // Find the first non-whitespace character. If it's a letter, we'll use that as the rank.
+        // Otherwise it goes last.
+        for(NSUInteger i = 0; i < asciifiedName.length; i++) {
+            char c = (char)[asciifiedName characterAtIndex:i];  // This conversion is safe; we've already converted to ASCII
+            
+            if(![whitespaceCharSet characterIsMember:c]) {
+                if([letterCharSet characterIsMember:c])
+                    firstLetter = c;
+
+                break;
+            }
+        }
+        
+        if(firstLetter != 0)
+            self.alphabetizationRank = firstLetter - 'a';
+        else
+            self.alphabetizationRank = 26;
+        
         
         int actualIconSize = 0;
         

@@ -11,6 +11,7 @@
 @interface M5VenueCategory : NSObject
 
 @property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, assign, readonly) uint alphabetizationRank; // 0 - 26 (A - Z, then anything else)
 @property (nonatomic, strong, readonly) NSString *_id;
 @property (nonatomic, strong, readonly) NSArray *subcategories;
 @property (nonatomic, strong, readonly) NSURL *iconURL;
