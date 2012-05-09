@@ -489,7 +489,7 @@ typedef enum {
     
     CLLocationDistance height = [CLLocation distanceFromCoordinate:northEastCorner toCoordinate:southEastCorner];
     
-    return [[CLRegion alloc] initCircularRegionWithCenter:region.center radius:height identifier:@"GeocodingRegion"];
+    return [[CLRegion alloc] initCircularRegionWithCenter:region.center radius:height / 2.0 identifier:@"GeocodingRegion"];
 }
 
 -(void)goToPlacemark:(CLPlacemark *)placemark
