@@ -39,12 +39,14 @@ typedef enum {
 }
 
 @property (weak, nonatomic) IBOutlet UIView *curlContainer;
+@property (weak, nonatomic) IBOutlet UIView *mapContainer;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UILabel *currentCategoryName;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 @property (strong, nonatomic) IBOutlet UIView *pageCurlView;
 @property (weak, nonatomic) IBOutlet UILabel *categoriesDateLabel;
+@property (weak, nonatomic) IBOutlet UIButton *curlDismissalButton;
 
 -(IBAction)categoryButtonTapped:(id)sender;
 -(IBAction)refreshButtonTapped:(id)sender;
@@ -76,12 +78,14 @@ typedef enum {
 @implementation M5ViewController
 
 @synthesize curlContainer;
+@synthesize mapContainer;
 @synthesize mapView;
 @synthesize currentCategoryName;
 @synthesize toolbar;
 @synthesize refreshButton;
 @synthesize pageCurlView;
 @synthesize categoriesDateLabel;
+@synthesize curlDismissalButton;
 
 #pragma mark - View Lifecycle
 
@@ -104,7 +108,7 @@ typedef enum {
     [toolbarItems insertObject:userTrackingButton atIndex:0];
     toolbar.items = toolbarItems;
     
-    pageCurlView.backgroundColor = [UIColor underPageBackgroundColor];
+    curlContainer.backgroundColor = [UIColor underPageBackgroundColor];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -129,6 +133,8 @@ typedef enum {
     [self setPageCurlView:nil];
     [self setCategoriesDateLabel:nil];
     [self setCurlContainer:nil];
+    [self setMapContainer:nil];
+    [self setCurlDismissalButton:nil];
     [super viewDidUnload];
 }
 
@@ -212,16 +218,15 @@ typedef enum {
     NSString *timeAgo = [self stringWithShortTimeSince:[M5FoursquareClient sharedClient].cachedCategoriesDate];
     categoriesDateLabel.text = [NSString stringWithFormat:@"Categories last updated %@", timeAgo];
     
-    CATransition *animation = [CATransition animation];
-    [animation setDuration:0.4];
-    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
-    animation.type = @"pageCurl";
-    animation.fillMode = kCAFillModeForwards;
-    animation.endProgress = 0.6;
-    [animation setRemovedOnCompletion:NO];
-    [curlContainer.layer addAnimation:animation forKey:@"pageCurlAnimation"];  
-    [curlContainer addSubview:pageCurlView];
+    [curlContainer insertSubview:pageCurlView belowSubview:mapContainer];
     
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        CGRect mapContainerFrame = mapContainer.frame;
+        mapContainerFrame.origin.y = -125;
+        mapContainer.frame = mapContainerFrame;
+    } completion:nil];
+    
+    curlDismissalButton.userInteractionEnabled = YES;
     mapIsCurled = YES;
 }
 
@@ -230,16 +235,15 @@ typedef enum {
     if(!mapIsCurled)
         return;
     
-    CATransition *animation = [CATransition animation];
-    [animation setDuration:0.4];
-    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
-    animation.type = @"pageUnCurl";
-    animation.fillMode = kCAFillModeForwards;
-    animation.startProgress = 0.4;
-    [animation setRemovedOnCompletion:NO];
-    [curlContainer.layer addAnimation:animation forKey:@"pageUnCurlAnimation"];  
-    [pageCurlView removeFromSuperview];
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        CGRect mapContainerFrame = mapContainer.frame;
+        mapContainerFrame.origin.y = 0;
+        mapContainer.frame = mapContainerFrame;
+    } completion:^(BOOL finished) {
+        [pageCurlView removeFromSuperview];
+    }];
     
+    curlDismissalButton.userInteractionEnabled = NO;
     mapIsCurled = NO;
 }
 
