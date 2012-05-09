@@ -22,6 +22,8 @@ typedef enum {
     M5AlertGoToLocation
 } M5AlertType;
 
+static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allowing the user to refresh the categories list (seconds)
+
 @interface M5ViewController () <MKMapViewDelegate, UIAlertViewDelegate, M5CategoriesControllerDelegate, SBTableAlertDataSource, SBTableAlertDelegate, UITextFieldDelegate> {
     M5AlertType currentAlert;
     NSArray *flattenedCategories;
@@ -45,6 +47,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 @property (strong, nonatomic) IBOutlet UIView *pageCurlView;
 @property (weak, nonatomic) IBOutlet UILabel *categoriesDateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *categoriesWaitLabel;
 @property (weak, nonatomic) IBOutlet UIButton *curlDismissalButton;
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
 
@@ -55,6 +58,8 @@ typedef enum {
 -(IBAction)reloadCategoriesTapped:(id)sender;
 -(IBAction)pageCurlButtonTapped:(UIBarButtonItem *)sender;
 -(IBAction)curlDismissalButtonTapped:(id)sender;
+
+-(void)hideRefreshWaitLabel;
 
 -(void)loadCategoriesIgnoringCache:(BOOL)ignoreCache;
 -(void)refreshVenues;
@@ -84,6 +89,7 @@ typedef enum {
 @synthesize refreshButton;
 @synthesize pageCurlView;
 @synthesize categoriesDateLabel;
+@synthesize categoriesWaitLabel;
 @synthesize curlDismissalButton;
 @synthesize categoryButton;
 
@@ -155,6 +161,7 @@ typedef enum {
     [self setMapContainer:nil];
     [self setCurlDismissalButton:nil];
     [self setCategoryButton:nil];
+    [self setCategoriesWaitLabel:nil];
     [super viewDidUnload];
 }
 
@@ -177,7 +184,6 @@ typedef enum {
 -(IBAction)refreshButtonTapped:(id)sender
 {
     [self uncurlMap];
-    
     [self refreshVenues];
 }
 
@@ -211,10 +217,32 @@ typedef enum {
     }
 }
 
+-(void)hideRefreshWaitLabel
+{
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        categoriesWaitLabel.alpha = 0;
+        categoriesDateLabel.alpha = 1;
+    } completion:nil];
+}
+
 -(IBAction)reloadCategoriesTapped:(id)sender
 {
-    [self uncurlMap];
-    [self loadCategoriesIgnoringCache:YES];
+    int now = [[NSDate date] timeIntervalSince1970];
+    int then = [[M5FoursquareClient sharedClient].cachedCategoriesDate timeIntervalSince1970];
+    int diff = MAX(1, now - then);
+    
+    if(diff < minCategoryRefreshInterval) {
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+            categoriesWaitLabel.alpha = 1;
+            categoriesDateLabel.alpha = 0;
+        } completion:nil];
+        
+        [self performSelector:@selector(hideRefreshWaitLabel) withObject:nil afterDelay:2.5];
+    }
+    else {
+        [self uncurlMap];
+        [self loadCategoriesIgnoringCache:YES];
+    }
 }
 
 -(IBAction)pageCurlButtonTapped:(UIBarButtonItem *)sender
