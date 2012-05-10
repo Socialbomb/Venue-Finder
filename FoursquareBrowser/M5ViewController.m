@@ -647,6 +647,11 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
         
         if([[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region])
             [self refreshVenues];
+        else {
+            [self setMapVenues:nil];
+            [self showRedoSearch];
+            [self showAreaTooLargeWarning];
+        }
     }];
 }
 
