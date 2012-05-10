@@ -340,6 +340,8 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     if(redoSearchIsVisible)
         return;
     
+    redoSearchContainer.hidden = NO;
+    
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGRect redoSearchFrame = redoSearchContainer.frame;
         redoSearchFrame.origin.y -= redoSearchFrame.size.height;
@@ -358,7 +360,9 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
         CGRect redoSearchFrame = redoSearchContainer.frame;
         redoSearchFrame.origin.y += redoSearchFrame.size.height;
         redoSearchContainer.frame = redoSearchFrame;
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        redoSearchContainer.hidden = YES;
+    }];
     
     redoSearchIsVisible = NO;
 }
