@@ -59,10 +59,10 @@
 		BD23D1A8151A3D5B00880922 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BD23D1AA151A3D5B00880922 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BD23D1AC151A3D5B00880922 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		BD23D1B0151A3D5B00880922 /* FoursquareBrowser-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FoursquareBrowser-Info.plist"; sourceTree = "<group>"; };
+		BD23D1B0151A3D5B00880922 /* VenueFinder-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VenueFinder-Info.plist"; sourceTree = "<group>"; };
 		BD23D1B2151A3D5B00880922 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BD23D1B4151A3D5B00880922 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		BD23D1B6151A3D5B00880922 /* FoursquareBrowser-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FoursquareBrowser-Prefix.pch"; sourceTree = "<group>"; };
+		BD23D1B6151A3D5B00880922 /* VenueFinder-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VenueFinder-Prefix.pch"; sourceTree = "<group>"; };
 		BD23D1B7151A3D5B00880922 /* M5AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M5AppDelegate.h; sourceTree = "<group>"; };
 		BD23D1B8151A3D5B00880922 /* M5AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M5AppDelegate.m; sourceTree = "<group>"; };
 		BD23D1BA151A3D5B00880922 /* M5ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M5ViewController.h; sourceTree = "<group>"; };
@@ -159,7 +159,7 @@
 				BD8B2364151A5F3700EA2615 /* MBProgressHUD */,
 				BD23D1C5151A3F4300880922 /* AFNetworking */,
 				BDCAAFAB1523C01700E35CD8 /* TestFlightSDK1 */,
-				BD23D1AE151A3D5B00880922 /* FoursquareBrowser */,
+				BD23D1AE151A3D5B00880922 /* VenueFinder */,
 				BD23D1A7151A3D5B00880922 /* Frameworks */,
 				BD23D1A5151A3D5B00880922 /* Products */,
 			);
@@ -187,7 +187,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		BD23D1AE151A3D5B00880922 /* FoursquareBrowser */ = {
+		BD23D1AE151A3D5B00880922 /* VenueFinder */ = {
 			isa = PBXGroup;
 			children = (
 				BDCAAF8D1523A3BC00E35CD8 /* Resources */,
@@ -211,17 +211,17 @@
 				BD912AB61524EAF20097A59F /* CLPlacemark+Utils.h */,
 				BD912AB71524EAF20097A59F /* CLPlacemark+Utils.m */,
 			);
-			path = FoursquareBrowser;
+			path = VenueFinder;
 			sourceTree = "<group>";
 		};
 		BD23D1AF151A3D5B00880922 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				BD23D1E9151A401300880922 /* IMPORTANT.h */,
-				BD23D1B0151A3D5B00880922 /* FoursquareBrowser-Info.plist */,
+				BD23D1B0151A3D5B00880922 /* VenueFinder-Info.plist */,
 				BD23D1B1151A3D5B00880922 /* InfoPlist.strings */,
 				BD23D1B4151A3D5B00880922 /* main.m */,
-				BD23D1B6151A3D5B00880922 /* FoursquareBrowser-Prefix.pch */,
+				BD23D1B6151A3D5B00880922 /* VenueFinder-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -349,7 +349,7 @@
 				CLASSPREFIX = M5;
 				LastUpgradeCheck = 0430;
 			};
-			buildConfigurationList = BD23D19E151A3D5B00880922 /* Build configuration list for PBXProject "FoursquareBrowser" */;
+			buildConfigurationList = BD23D19E151A3D5B00880922 /* Build configuration list for PBXProject "VenueFinder" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -492,8 +492,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FoursquareBrowser/FoursquareBrowser-Prefix.pch";
-				INFOPLIST_FILE = "FoursquareBrowser/FoursquareBrowser-Info.plist";
+				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
+				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1\"",
@@ -507,8 +507,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FoursquareBrowser/FoursquareBrowser-Prefix.pch";
-				INFOPLIST_FILE = "FoursquareBrowser/FoursquareBrowser-Info.plist";
+				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
+				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1\"",
@@ -521,7 +521,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BD23D19E151A3D5B00880922 /* Build configuration list for PBXProject "FoursquareBrowser" */ = {
+		BD23D19E151A3D5B00880922 /* Build configuration list for PBXProject "VenueFinder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BD23D1C0151A3D5B00880922 /* Debug */,
