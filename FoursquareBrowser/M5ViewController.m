@@ -19,12 +19,13 @@
 
 typedef enum {
     M5AlertCategoryError,
-    M5AlertGoToLocation
+    M5AlertGoToLocation,
+    M5VenueSearchError,
 } M5AlertType;
 
 static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allowing the user to refresh the categories list (seconds)
 
-@interface M5ViewController () <MKMapViewDelegate, UIAlertViewDelegate, M5CategoriesControllerDelegate, SBTableAlertDataSource, SBTableAlertDelegate, UITextFieldDelegate> {
+@interface M5ViewController () <MKMapViewDelegate, UIAlertViewDelegate, M5CategoriesControllerDelegate, SBTableAlertDataSource, SBTableAlertDelegate, UITextFieldDelegate, CLLocationManagerDelegate> {
     M5AlertType currentAlert;
     NSArray *flattenedCategories;
     M5VenueCategory *currentCategory;
@@ -38,36 +39,42 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     NSArray *placemarks;
     
     BOOL mapIsCurled;
+    BOOL redoSearchIsVisible;
+    
+    BOOL locationAuthPending;  // Yes until we know our location auth status
+    BOOL handledInitialUserLocation;  // NO until we've gotten some notice about the status of locating the user
+    BOOL doVenueSearchAfterCategoriesLoad;  // YES if we locate the user before we finish loading categories
+    BOOL showRedoSearchAfterCategoriesLoad;  // YES if there was an error locating the user before categories finished loading
     
     AFImageRequestOperation *categoryIconRequest;
+    
+    CLLocationManager *locationManager;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *curlContainer;
 @property (weak, nonatomic) IBOutlet UIView *mapContainer;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 @property (strong, nonatomic) IBOutlet UIView *pageCurlView;
 @property (weak, nonatomic) IBOutlet UILabel *categoriesDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoriesWaitLabel;
 @property (weak, nonatomic) IBOutlet UIButton *curlDismissalButton;
 @property (weak, nonatomic) IBOutlet UIButton *categoryButton;
+@property (weak, nonatomic) IBOutlet UILabel *searchAreaTooBigLabel;
+@property (weak, nonatomic) IBOutlet UIView *redoSearchContainer;
+@property (weak, nonatomic) IBOutlet UIButton *redoSearchButton;
 
 -(IBAction)categoryButtonTapped:(id)sender;
--(IBAction)refreshButtonTapped:(id)sender;
+-(IBAction)refreshButtonTapped:(UIButton *)sender;
 -(IBAction)goButtonTapped:(id)sender;
 -(IBAction)mapTypeTapped:(UISegmentedControl *)sender;
 -(IBAction)reloadCategoriesTapped:(id)sender;
 -(IBAction)pageCurlButtonTapped:(UIBarButtonItem *)sender;
 -(IBAction)curlDismissalButtonTapped:(id)sender;
 
--(void)hideRefreshWaitLabel;
-
 -(void)loadCategoriesIgnoringCache:(BOOL)ignoreCache;
 -(void)refreshVenues;
 -(void)setCategoryLabelFromCategory:(M5VenueCategory *)category;
-
--(void)enableRefreshButtonAppropriately;
 
 -(void)setMapVenues:(NSArray *)venues;
 
@@ -76,6 +83,11 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 
 -(void)curlMap;
 -(void)uncurlMap;
+
+-(void)showRedoSearch;
+-(void)hideRedoSearch;
+
+-(void)showAreaTooLargeWarning;  // Call -showRedoSearch first
 
 -(NSString *)stringWithShortTimeSince:(NSDate *)date;
 
@@ -88,12 +100,14 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 @synthesize mapContainer;
 @synthesize mapView;
 @synthesize toolbar;
-@synthesize refreshButton;
 @synthesize pageCurlView;
 @synthesize categoriesDateLabel;
 @synthesize categoriesWaitLabel;
 @synthesize curlDismissalButton;
 @synthesize categoryButton;
+@synthesize searchAreaTooBigLabel;
+@synthesize redoSearchContainer;
+@synthesize redoSearchButton;
 
 #pragma mark - View Lifecycle
 
@@ -102,6 +116,13 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     self = [super initWithNibName:@"M5ViewController" bundle:nil];
     if(self) {
         self.title = @"Map";
+        
+        if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+            locationAuthPending = YES;
+            
+            locationManager = [[CLLocationManager alloc] init];
+            locationManager.delegate = self;
+        }
     }
     
     return self;
@@ -136,8 +157,10 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     [super viewWillAppear:animated];
     
     if(!didAppear) {
-        // First appearance. Find the user and load categories        
-        mapView.userTrackingMode = MKUserTrackingModeFollow;
+        // First appearance. Find the user (if we can) and load categories
+        if(!locationAuthPending)
+            mapView.userTrackingMode = MKUserTrackingModeFollow;
+        
         [self loadCategoriesIgnoringCache:NO];
     }
     
@@ -158,7 +181,6 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 {
     [self setMapView:nil];
     [self setToolbar:nil];
-    [self setRefreshButton:nil];
     [self setPageCurlView:nil];
     [self setCategoriesDateLabel:nil];
     [self setCurlContainer:nil];
@@ -166,6 +188,9 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     [self setCurlDismissalButton:nil];
     [self setCategoryButton:nil];
     [self setCategoriesWaitLabel:nil];
+    [self setSearchAreaTooBigLabel:nil];
+    [self setRedoSearchContainer:nil];
+    [self setRedoSearchButton:nil];
     [super viewDidUnload];
 }
 
@@ -185,10 +210,26 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     [self presentModalViewController:categoriesController animated:YES];
 }
 
--(IBAction)refreshButtonTapped:(id)sender
+-(IBAction)refreshButtonTapped:(UIButton *)sender
 {
-    [self uncurlMap];
-    [self refreshVenues];
+    if([[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region])    
+        [self refreshVenues];
+    else {
+        [self showAreaTooLargeWarning];
+    }
+}
+
+-(void)showAreaTooLargeWarning
+{
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        redoSearchButton.alpha = 0;
+        searchAreaTooBigLabel.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.2 delay:2.5 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+            redoSearchButton.alpha = 1;
+            searchAreaTooBigLabel.alpha = 0;
+        } completion:nil];
+    }];
 }
 
 -(IBAction)goButtonTapped:(id)sender
@@ -221,14 +262,6 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     }
 }
 
--(void)hideRefreshWaitLabel
-{
-    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-        categoriesWaitLabel.alpha = 0;
-        categoriesDateLabel.alpha = 1;
-    } completion:nil];
-}
-
 -(IBAction)reloadCategoriesTapped:(id)sender
 {
     int now = [[NSDate date] timeIntervalSince1970];
@@ -239,9 +272,12 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
             categoriesWaitLabel.alpha = 1;
             categoriesDateLabel.alpha = 0;
-        } completion:nil];
-        
-        [self performSelector:@selector(hideRefreshWaitLabel) withObject:nil afterDelay:2.5];
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 delay:2.5 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+                categoriesWaitLabel.alpha = 0;
+                categoriesDateLabel.alpha = 1;
+            } completion:nil];
+        }];
     }
     else {
         [self uncurlMap];
@@ -299,6 +335,34 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     mapIsCurled = NO;
 }
 
+-(void)showRedoSearch
+{
+    if(redoSearchIsVisible)
+        return;
+    
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        CGRect redoSearchFrame = redoSearchContainer.frame;
+        redoSearchFrame.origin.y -= redoSearchFrame.size.height;
+        redoSearchContainer.frame = redoSearchFrame;
+    } completion:nil];
+    
+    redoSearchIsVisible = YES;
+}
+
+-(void)hideRedoSearch
+{
+    if(!redoSearchIsVisible)
+        return;
+    
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        CGRect redoSearchFrame = redoSearchContainer.frame;
+        redoSearchFrame.origin.y += redoSearchFrame.size.height;
+        redoSearchContainer.frame = redoSearchFrame;
+    } completion:nil];
+    
+    redoSearchIsVisible = NO;
+}
+
 #pragma mark - MKMapViewDelegate
 
 -(void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated
@@ -308,9 +372,55 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 }
 
 -(void)mapView:(MKMapView *)theMapView regionDidChangeAnimated:(BOOL)animated
-{
-    [self enableRefreshButtonAppropriately];
+{    
+    CLLocationCoordinate2D oldCenter = lastMapRegion.center;
     lastMapRegion = mapView.region;
+    
+    // Show the redo search thing if this isn't one of our initial locations, and if we've moved more than
+    // a tiny amount (as happens when the GPS signal isn't so hot)
+    if(handledInitialUserLocation) {
+        CLLocationDistance dist = [CLLocation distanceFromCoordinate:oldCenter toCoordinate:mapView.region.center];
+        if(dist > 10)        
+            [self showRedoSearch];
+    }
+}
+
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{   
+    // Ignore this (even though it fires?) if we aren't authed for CoreLocation stuff
+    if(locationAuthPending)
+        return;
+    
+    if(!handledInitialUserLocation) {
+        // This is our first true fix on the user; do a search if we have the categories.
+        // Otherwise set a flag that the category load thign will read.
+        
+        handledInitialUserLocation = YES;
+        
+        if(flattenedCategories)
+            [self refreshVenues];
+        else
+            doVenueSearchAfterCategoriesLoad = YES;
+    }
+}
+
+-(void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
+{   
+    // Ignore this if we're still waiting for approval
+    if(locationAuthPending)
+        return;
+    
+    if(!handledInitialUserLocation) {
+        // We're not going to be able to find the user, apparently.
+        // Just show the refresh button (or mark it to be shown after categories load, if necessary)
+        
+        handledInitialUserLocation = YES;
+        
+        if(flattenedCategories)
+            [self showRedoSearch];
+        else
+            showRedoSearchAfterCategoriesLoad = YES;
+    }
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id<MKAnnotation>)annotation
@@ -356,6 +466,11 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 {
     if(currentAlert == M5AlertCategoryError) {
         [self loadCategoriesIgnoringCache:NO];
+    }
+    if(currentAlert == M5VenueSearchError) {
+        // Forcibly allow the user to retry the search (the redo search thing may not have been visible
+        // if this was the search we do on app launch)
+        [self showRedoSearch];
     }
     else if(currentAlert == M5AlertGoToLocation) {
         if(buttonIndex != alertView.cancelButtonIndex) {
@@ -427,12 +542,12 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
         req.HTTPShouldHandleCookies = NO;
         req.HTTPShouldUsePipelining = YES;
         
-        const float desiredIconHeight = 28;
+        const float desiredIconHeight = 25;
         
         categoryIconRequest = [AFImageRequestOperation imageRequestOperationWithRequest:req imageProcessingBlock:^UIImage *(UIImage *img) {
             // Scale the image down. Setting content mode on a UIButton's imageView doesn't work when it's highlighted, so we just make the image manually.
             UIImage *scaledImg = [UIImage imageWithCGImage:[img CGImage]
-                                                     scale:img.size.height / desiredIconHeight
+                                                     scale:img.size.height / desiredIconHeight * [UIScreen mainScreen].scale
                                                orientation:UIImageOrientationUp];
             
             return scaledImg;
@@ -455,6 +570,14 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
         flattenedCategories = theCategories;
         
         [self hideAllHUDsFromView];
+        
+        // Check our flags for initial search/redo search stuff:
+        if(doVenueSearchAfterCategoriesLoad)
+            [self refreshVenues];
+        else if(showRedoSearchAfterCategoriesLoad)
+            [self showRedoSearch];
+        
+        doVenueSearchAfterCategoriesLoad = showRedoSearchAfterCategoriesLoad = NO;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self hideAllHUDsFromView];
         
@@ -470,10 +593,18 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 
 -(void)refreshVenues
 {
+    if(![[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region]) {
+        [self showRedoSearch];
+        [self showAreaTooLargeWarning];
+        
+        return;
+    }
+    
     [self showHUDFromViewWithText:@"Searching" details:@"finding venues" dimScreen:YES];
     [[M5FoursquareClient sharedClient] getVenuesOfCategory:currentCategory._id
                                                inMapRegion:mapView.region
                                                 completion:^(NSArray *venues) {
+                                                    [self hideRedoSearch];
                                                     [self hideAllHUDsFromView];
                                                     
                                                     [self setMapVenues:venues];
@@ -481,9 +612,10 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
                                                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                     [self hideAllHUDsFromView];
                                                     
+                                                    currentAlert = M5VenueSearchError;
                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Ruh Roh!"
                                                                                                     message:@"Couldn't load venues! Try again later."
-                                                                                                   delegate:nil
+                                                                                                   delegate:self
                                                                                           cancelButtonTitle:@"OK"
                                                                                           otherButtonTitles:nil];
                                                     [alert show];
@@ -554,12 +686,24 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     [self goToPlacemark:placemark];
 }
 
-#pragma mark - Utilities
+#pragma mark - CLLocationManagerDelegate
 
--(void)enableRefreshButtonAppropriately
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-    refreshButton.enabled = [[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region];
+    // We get told this initially for some reason...
+    if(status == kCLAuthorizationStatusNotDetermined)
+        return;
+    
+    locationAuthPending = NO;
+    
+    if(status == kCLAuthorizationStatusAuthorized)
+        mapView.userTrackingMode = MKUserTrackingModeFollow;
+    
+    locationManager.delegate = nil;
+    locationManager = nil;
 }
+
+#pragma mark - Utilities
 
 -(CLRegion *)CLRegionWithMapRegion:(MKCoordinateRegion)region
 {
