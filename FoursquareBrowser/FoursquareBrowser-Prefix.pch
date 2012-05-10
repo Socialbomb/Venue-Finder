@@ -18,7 +18,7 @@
         
         // The beta 1 SDK of TestFlight no longer collects UDIDs by default.
         // Comment out this line to stop using them:
-        #define TESTFLIGHT_USE_UDID
+        //#define TESTFLIGHT_USE_UDID
 
         #define NSLog TFLog
         #import "TestFlight.h"
