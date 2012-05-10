@@ -38,6 +38,8 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     NSArray *placemarks;
     
     BOOL mapIsCurled;
+    
+    AFImageRequestOperation *categoryIconRequest;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *curlContainer;
@@ -125,6 +127,8 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     toolbar.items = toolbarItems;
     
     curlContainer.backgroundColor = [UIColor underPageBackgroundColor];
+    
+    categoryButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -408,10 +412,36 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 
 -(void)setCategoryLabelFromCategory:(M5VenueCategory *)category
 {
-    if(!category)
+    [categoryIconRequest cancel];
+    categoryIconRequest = nil;
+    
+    if(!category) {
         [categoryButton setTitle:@"All categories" forState:UIControlStateNormal];
-    else
+        [categoryButton setImage:[UIImage imageNamed:@"44-shoebox.png"] forState:UIControlStateNormal];
+    }
+    else {
         [categoryButton setTitle:category.pluralName forState:UIControlStateNormal];
+        [categoryButton setImage:[UIImage imageNamed:@"44-shoebox.png"] forState:UIControlStateNormal];
+        
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:category.iconURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
+        req.HTTPShouldHandleCookies = NO;
+        req.HTTPShouldUsePipelining = YES;
+        
+        const float desiredIconHeight = 28;
+        
+        categoryIconRequest = [AFImageRequestOperation imageRequestOperationWithRequest:req imageProcessingBlock:^UIImage *(UIImage *img) {
+            // Scale the image down. Setting content mode on a UIButton's imageView doesn't work when it's highlighted, so we just make the image manually.
+            UIImage *scaledImg = [UIImage imageWithCGImage:[img CGImage]
+                                                     scale:img.size.height / desiredIconHeight
+                                               orientation:UIImageOrientationUp];
+            
+            return scaledImg;
+        } cacheName:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            [categoryButton setImage:image forState:UIControlStateNormal];
+        } failure:nil];
+        
+        [categoryIconRequest start];
+    }
 }
 
 -(void)loadCategoriesIgnoringCache:(BOOL)ignoreCache

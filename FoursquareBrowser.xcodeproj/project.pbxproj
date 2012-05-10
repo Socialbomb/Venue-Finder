@@ -40,11 +40,11 @@
 		BD912AB51524E5CF0097A59F /* M5PlacemarkAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = BD912AB41524E5CF0097A59F /* M5PlacemarkAnnotation.m */; };
 		BD912AB81524EAF20097A59F /* CLPlacemark+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD912AB71524EAF20097A59F /* CLPlacemark+Utils.m */; };
 		BD912AC81525131A0097A59F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD912AC71525131A0097A59F /* QuartzCore.framework */; };
+		BDBF6BD7155C18FC00762B0C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BDBF6BD6155C18FC00762B0C /* Icon.png */; };
+		BDBF6BD9155C190800762B0C /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDBF6BD8155C190800762B0C /* Icon@2x.png */; };
 		BDCAAF6F1523703D00E35CD8 /* CLLocation+measuring.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */; };
 		BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7B15237C2000E35CD8 /* blank.png */; };
 		BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7C15237C2000E35CD8 /* blank@2x.png */; };
-		BDCAAF941523A43400E35CD8 /* venuelocator.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF931523A43400E35CD8 /* venuelocator.png */; };
-		BDCAAF961523A43600E35CD8 /* venuelocator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */; };
 		BDCAAFB01523C01700E35CD8 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */; };
 		BDCAAFB41523C0A600E35CD8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCAAFB31523C0A600E35CD8 /* libz.dylib */; };
 		BDFDE3E7155B15190063AEA4 /* foursquare-icon-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = BDFDE3E6155B15190063AEA4 /* foursquare-icon-36x36.png */; };
@@ -115,13 +115,13 @@
 		BD912AB61524EAF20097A59F /* CLPlacemark+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLPlacemark+Utils.h"; sourceTree = "<group>"; };
 		BD912AB71524EAF20097A59F /* CLPlacemark+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLPlacemark+Utils.m"; sourceTree = "<group>"; };
 		BD912AC71525131A0097A59F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		BDBF6BD6155C18FC00762B0C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../../Icon.png; sourceTree = "<group>"; };
+		BDBF6BD8155C190800762B0C /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../../Icon@2x.png"; sourceTree = "<group>"; };
 		BDCAAF6D1523702900E35CD8 /* CLLocation+measuring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CLLocation+measuring.h"; sourceTree = "<group>"; };
 		BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+measuring.m"; sourceTree = "<group>"; };
 		BDCAAF701523705800E35CD8 /* CLUtilsDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLUtilsDefines.h; sourceTree = "<group>"; };
 		BDCAAF7B15237C2000E35CD8 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
 		BDCAAF7C15237C2000E35CD8 /* blank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank@2x.png"; sourceTree = "<group>"; };
-		BDCAAF931523A43400E35CD8 /* venuelocator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = venuelocator.png; path = ../../venuelocator.png; sourceTree = "<group>"; };
-		BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "venuelocator@2x.png"; path = "../../venuelocator@2x.png"; sourceTree = "<group>"; };
 		BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		BDCAAFAF1523C01700E35CD8 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		BDCAAFB31523C0A600E35CD8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -298,10 +298,10 @@
 		BDCAAF8D1523A3BC00E35CD8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BDBF6BD8155C190800762B0C /* Icon@2x.png */,
+				BDBF6BD6155C18FC00762B0C /* Icon.png */,
 				BDCAAF7B15237C2000E35CD8 /* blank.png */,
 				BDCAAF7C15237C2000E35CD8 /* blank@2x.png */,
-				BDCAAF951523A43600E35CD8 /* venuelocator@2x.png */,
-				BDCAAF931523A43400E35CD8 /* venuelocator.png */,
 				BDFDE3E6155B15190063AEA4 /* foursquare-icon-36x36.png */,
 				BDFDE3E9155B18B10063AEA4 /* 07-map-marker.png */,
 				BDFDE3EA155B18B10063AEA4 /* 07-map-marker@2x.png */,
@@ -377,13 +377,13 @@
 				BD27F3B915226C2F008B874B /* M5VenueViewController.xib in Resources */,
 				BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */,
 				BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */,
-				BDCAAF941523A43400E35CD8 /* venuelocator.png in Resources */,
-				BDCAAF961523A43600E35CD8 /* venuelocator@2x.png in Resources */,
 				BDFDE3E7155B15190063AEA4 /* foursquare-icon-36x36.png in Resources */,
 				BDFDE3ED155B18B10063AEA4 /* 07-map-marker.png in Resources */,
 				BDFDE3EE155B18B10063AEA4 /* 07-map-marker@2x.png in Resources */,
 				BDFDE3EF155B18B10063AEA4 /* 44-shoebox.png in Resources */,
 				BDFDE3F0155B18B10063AEA4 /* 44-shoebox@2x.png in Resources */,
+				BDBF6BD7155C18FC00762B0C /* Icon.png in Resources */,
+				BDBF6BD9155C190800762B0C /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
