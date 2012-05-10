@@ -42,6 +42,8 @@
 		BD912AC81525131A0097A59F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD912AC71525131A0097A59F /* QuartzCore.framework */; };
 		BDBF6BD7155C18FC00762B0C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BDBF6BD6155C18FC00762B0C /* Icon.png */; };
 		BDBF6BD9155C190800762B0C /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDBF6BD8155C190800762B0C /* Icon@2x.png */; };
+		BDBF6BDB155C41D000762B0C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BDBF6BDA155C41D000762B0C /* Default.png */; };
+		BDBF6BDD155C41D200762B0C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDBF6BDC155C41D200762B0C /* Default@2x.png */; };
 		BDCAAF6F1523703D00E35CD8 /* CLLocation+measuring.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */; };
 		BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7B15237C2000E35CD8 /* blank.png */; };
 		BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7C15237C2000E35CD8 /* blank@2x.png */; };
@@ -53,7 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BD23D1A4151A3D5B00880922 /* FoursquareBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoursquareBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD23D1A4151A3D5B00880922 /* VenueFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VenueFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD23D1A8151A3D5B00880922 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BD23D1AA151A3D5B00880922 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BD23D1AC151A3D5B00880922 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -115,6 +117,8 @@
 		BD912AC71525131A0097A59F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BDBF6BD6155C18FC00762B0C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../../Icon.png; sourceTree = "<group>"; };
 		BDBF6BD8155C190800762B0C /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../../Icon@2x.png"; sourceTree = "<group>"; };
+		BDBF6BDA155C41D000762B0C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../Default.png; sourceTree = "<group>"; };
+		BDBF6BDC155C41D200762B0C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../../Default@2x.png"; sourceTree = "<group>"; };
 		BDCAAF6D1523702900E35CD8 /* CLLocation+measuring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CLLocation+measuring.h"; sourceTree = "<group>"; };
 		BDCAAF6E1523702900E35CD8 /* CLLocation+measuring.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+measuring.m"; sourceTree = "<group>"; };
 		BDCAAF701523705800E35CD8 /* CLUtilsDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLUtilsDefines.h; sourceTree = "<group>"; };
@@ -164,7 +168,7 @@
 		BD23D1A5151A3D5B00880922 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BD23D1A4151A3D5B00880922 /* FoursquareBrowser.app */,
+				BD23D1A4151A3D5B00880922 /* VenueFinder.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -294,6 +298,8 @@
 		BDCAAF8D1523A3BC00E35CD8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BDBF6BDC155C41D200762B0C /* Default@2x.png */,
+				BDBF6BDA155C41D000762B0C /* Default.png */,
 				BDBF6BD8155C190800762B0C /* Icon@2x.png */,
 				BDBF6BD6155C18FC00762B0C /* Icon.png */,
 				BDCAAF7B15237C2000E35CD8 /* blank.png */,
@@ -317,9 +323,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BD23D1A3151A3D5B00880922 /* FoursquareBrowser */ = {
+		BD23D1A3151A3D5B00880922 /* VenueFinder */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BD23D1C2151A3D5B00880922 /* Build configuration list for PBXNativeTarget "FoursquareBrowser" */;
+			buildConfigurationList = BD23D1C2151A3D5B00880922 /* Build configuration list for PBXNativeTarget "VenueFinder" */;
 			buildPhases = (
 				BD23D1A0151A3D5B00880922 /* Sources */,
 				BD23D1A1151A3D5B00880922 /* Frameworks */,
@@ -329,9 +335,9 @@
 			);
 			dependencies = (
 			);
-			name = FoursquareBrowser;
+			name = VenueFinder;
 			productName = FoursquareBrowser;
-			productReference = BD23D1A4151A3D5B00880922 /* FoursquareBrowser.app */;
+			productReference = BD23D1A4151A3D5B00880922 /* VenueFinder.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -355,7 +361,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BD23D1A3151A3D5B00880922 /* FoursquareBrowser */,
+				BD23D1A3151A3D5B00880922 /* VenueFinder */,
 			);
 		};
 /* End PBXProject section */
@@ -376,6 +382,8 @@
 				BDFDE3F0155B18B10063AEA4 /* 44-shoebox@2x.png in Resources */,
 				BDBF6BD7155C18FC00762B0C /* Icon.png in Resources */,
 				BDBF6BD9155C190800762B0C /* Icon@2x.png in Resources */,
+				BDBF6BDB155C41D000762B0C /* Default.png in Resources */,
+				BDBF6BDD155C41D200762B0C /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,7 +530,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BD23D1C2151A3D5B00880922 /* Build configuration list for PBXNativeTarget "FoursquareBrowser" */ = {
+		BD23D1C2151A3D5B00880922 /* Build configuration list for PBXNativeTarget "VenueFinder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BD23D1C3151A3D5B00880922 /* Debug */,
