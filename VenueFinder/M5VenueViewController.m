@@ -236,7 +236,7 @@ typedef enum {
 
 -(M5VenueCellData *)cellDataForIndexPath:(NSIndexPath *)indexPath
 {
-    return [[cellDataBySection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    return [[cellDataBySection objectAtIndex:(NSUInteger)indexPath.section] objectAtIndex:(NSUInteger)indexPath.row];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -266,7 +266,7 @@ typedef enum {
 {
     if(!venue) return 0;
     
-    return [[cellDataBySection objectAtIndex:section] count];
+    return (NSInteger)[[cellDataBySection objectAtIndex:(NSUInteger)section] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)theTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -291,10 +291,10 @@ typedef enum {
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if([[cellDataBySection objectAtIndex:section] count] == 0)
+    if([[cellDataBySection objectAtIndex:(NSUInteger)section] count] == 0)
         return nil;
     
-    return [sectionTitles objectAtIndex:section];
+    return [sectionTitles objectAtIndex:(NSUInteger)section];
 }
 
 -(BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender

@@ -18,12 +18,13 @@
 #import "M5PlacemarkAnnotation.h"
 
 typedef enum {
+    M5NoAlert,
     M5AlertCategoryError,
     M5AlertGoToLocation,
     M5VenueSearchError,
 } M5AlertType;
 
-static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allowing the user to refresh the categories list (seconds)
+static const CFTimeInterval minCategoryRefreshInterval = 60.0 * 60.0; // Min time between allowing the user to refresh the categories list (seconds)
 
 @interface M5ViewController () <MKMapViewDelegate, UIAlertViewDelegate, M5CategoriesControllerDelegate, SBTableAlertDataSource, SBTableAlertDelegate, UITextFieldDelegate, CLLocationManagerDelegate> {
     M5AlertType currentAlert;
@@ -205,9 +206,16 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 {
     [self uncurlMap];
     
+    // We present the CategoriesController inside a UINavigationController so that its search bar will handle
+    // the automatic hiding of the navigation bar.
+    
     M5CategoriesController *categoriesController = [[M5CategoriesController alloc] initWithCategories:flattenedCategories];
     categoriesController.delegate = self;
-    [self presentModalViewController:categoriesController animated:YES];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:categoriesController];
+    navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    
+    [self presentModalViewController:navController animated:YES];
 }
 
 -(IBAction)refreshButtonTapped:(UIButton *)sender
@@ -264,9 +272,9 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 
 -(IBAction)reloadCategoriesTapped:(id)sender
 {
-    int now = [[NSDate date] timeIntervalSince1970];
-    int then = [[M5FoursquareClient sharedClient].cachedCategoriesDate timeIntervalSince1970];
-    int diff = MAX(1, now - then);
+    CFTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    CFTimeInterval then = [[M5FoursquareClient sharedClient].cachedCategoriesDate timeIntervalSince1970];
+    CFTimeInterval diff = MAX(1, now - then);
     
     if(diff < minCategoryRefreshInterval) {
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
@@ -471,7 +479,7 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     if(currentAlert == M5AlertCategoryError) {
         [self loadCategoriesIgnoringCache:NO];
     }
-    if(currentAlert == M5VenueSearchError) {
+    else if(currentAlert == M5VenueSearchError) {
         // Forcibly allow the user to retry the search (the redo search thing may not have been visible
         // if this was the search we do on app launch)
         [self showRedoSearch];
@@ -507,7 +515,7 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     }
     
     goAlert = nil;
-    currentAlert = -1;
+    currentAlert = M5NoAlert;
 }
 
 -(BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
@@ -673,7 +681,7 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 
 -(NSInteger)tableAlert:(SBTableAlert *)tableAlert numberOfRowsInSection:(NSInteger)section
 {
-    return placemarks.count;
+    return (NSInteger)placemarks.count;
 }
 
 -(UITableViewCell *)tableAlert:(SBTableAlert *)tableAlert cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -682,7 +690,7 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
     if(!cell)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
     
-    CLPlacemark *placemark = [placemarks objectAtIndex:indexPath.row];
+    CLPlacemark *placemark = [placemarks objectAtIndex:(NSUInteger)indexPath.row];
     cell.textLabel.text = placemark.friendlyTitle;
     cell.detailTextLabel.text = placemark.friendlySubtitle;
     
@@ -691,7 +699,7 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 
 -(void)tableAlert:(SBTableAlert *)tableAlert didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CLPlacemark *placemark = [placemarks objectAtIndex:indexPath.row];
+    CLPlacemark *placemark = [placemarks objectAtIndex:(NSUInteger)indexPath.row];
     [self goToPlacemark:placemark];
 }
 
@@ -746,23 +754,23 @@ static const uint minCategoryRefreshInterval = 60 * 60; // Min time between allo
 
 -(NSString *)stringWithShortTimeSince:(NSDate *)date
 {
-    int now = [[NSDate date] timeIntervalSince1970];
-    int then = [date timeIntervalSince1970];
+    CFTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    CFTimeInterval then = [date timeIntervalSince1970];
     
-    int diff = MAX(1, now - then);
+    CFTimeInterval diff = MAX(1, now - then);
     
-    if( diff < 60 )
+    if(diff < 60)
         return @"seconds ago";
-    else if(diff < 60 * 60 ) {
-        int mins = diff / 60.0;
+    else if(diff < 60 * 60) {
+        int mins = (int)(diff / 60.0);
         return [NSString stringWithFormat:@"%i minute%@ ago", mins, mins > 1 ? @"s" : @""];
     }
     else if(diff < 60 * 60 * 24) {
-        int hrs = diff / (60.0 * 60.0);
+        int hrs = (int)(diff / (60.0 * 60.0));
         return [NSString stringWithFormat:@"%i hour%@ ago", hrs, hrs > 1 ? @"s" : @""];
     }
     
-    int days = diff / (60.0 * 60.0 * 24.0);
+    int days = (int)(diff / (60.0 * 60.0 * 24.0));
     return [NSString stringWithFormat:@"%i day%@ ago", days, days > 1 ? @"s" : @""];
 }
 
