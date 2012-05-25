@@ -284,7 +284,7 @@ typedef enum {
     
     cell.textLabel.text = data.name;
     cell.detailTextLabel.text = data.value;
-    cell.selectionStyle = (data.target && data.selector) ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
+    cell.selectionStyle = (data.target && data.selector) ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
     
     return cell;
 }
