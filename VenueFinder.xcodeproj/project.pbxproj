@@ -491,6 +491,7 @@
 		BD23D1C3151A3D5B00880922 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Socialbomb, LLC";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
@@ -499,6 +500,7 @@
 					"\"$(SRCROOT)/TestFlightSDK1\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9A196A20-9648-4C1F-AB89-2E12B9ABDDAA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -506,6 +508,7 @@
 		BD23D1C4151A3D5B00880922 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Socialbomb, LLC";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
@@ -514,6 +517,7 @@
 					"\"$(SRCROOT)/TestFlightSDK1\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9A196A20-9648-4C1F-AB89-2E12B9ABDDAA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
