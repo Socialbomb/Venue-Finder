@@ -45,11 +45,11 @@ static const int M5PreferredCategoryIconSize = 64;
         // Find the first non-whitespace character. If it's a letter, we'll use that as the rank.
         // Otherwise it goes last.
         for(NSUInteger i = 0; i < asciifiedName.length; i++) {
-            char c = (char)[asciifiedName characterAtIndex:i];  // This conversion is safe; we've already converted to ASCII
+            unichar c = [asciifiedName characterAtIndex:i];
             
             if(![whitespaceCharSet characterIsMember:c]) {
                 if([letterCharSet characterIsMember:c])
-                    firstLetter = c;
+                    firstLetter = (char)c; // This conversion is safe; we've already converted to ASCII
 
                 break;
             }

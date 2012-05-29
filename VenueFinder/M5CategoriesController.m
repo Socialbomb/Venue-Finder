@@ -10,7 +10,6 @@
 
 @interface M5CategoriesController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate> {
     NSArray *categories;
-    UISearchDisplayController *searchController;
     NSArray *filteredCategories;
     UIImage *blankImage;
     
@@ -23,7 +22,6 @@
 
 -(M5VenueCategory *)categoryForIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)theTableView;
 
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -31,7 +29,6 @@
 
 @implementation M5CategoriesController
 
-@synthesize searchBar;
 @synthesize tableView;
 @synthesize delegate;
 
@@ -56,6 +53,21 @@
             NSMutableArray *sectionArray = [categoriesBySection objectAtIndex:category.alphabetizationRank];
             [sectionArray addObject:category];
         }
+        
+        // Originally designed this with just a dummy UINavigationBar at the top, but it seems UISearchDisplayController
+        // won't hide the nav bar on its searchContentsController unless it's inside a real UINavigationController...
+        
+        self.title = @"Categories";
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                              target:self
+                                                                                              action:@selector(cancelButtonTapped:)];
+
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"No Filter"
+                                                                                  style:UIBarButtonItemStyleDone
+                                                                                 target:self
+                                                                                 action:@selector(noFilterButtonTapped:)];
+        
+        self.navigationItem.rightBarButtonItem.tintColor = [UIColor colorWithRed:42.0/255.0 green:91.0/255.0 blue:213.0/255.0 alpha:1.0];
     }
     return self;
 }
@@ -64,17 +76,12 @@
 {
     [super viewDidLoad];
     
-    searchController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-    searchController.delegate = self;
-    searchController.searchResultsDataSource = self;
-    searchController.searchResultsDelegate = self;
-    
-    tableView.contentOffset = CGPointMake(0, searchController.searchBar.frame.size.height);
+    // Scroll the search bar offscreen
+    tableView.contentOffset = CGPointMake(0, self.searchDisplayController.searchBar.frame.size.height);
 }
 
 -(void)viewDidUnload
 {
-    [self setSearchBar:nil];
     [self setTableView:nil];
     [super viewDidUnload];
 }
@@ -95,19 +102,19 @@
 -(M5VenueCategory *)categoryForIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)theTableView
 {
     if(theTableView == tableView)
-        return [[categoriesBySection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        return [[categoriesBySection objectAtIndex:(NSUInteger)indexPath.section] objectAtIndex:(NSUInteger)indexPath.row];
     
-    return [filteredCategories objectAtIndex:indexPath.row];  // Search results
+    return [filteredCategories objectAtIndex:(NSUInteger)indexPath.row];  // Search results
 }
 
 #pragma mark - UITableViewDataSource and UITableViewDelegate
 
 -(NSInteger)tableView:(UITableView *)theTableView numberOfRowsInSection:(NSInteger)section
 {
-    if(theTableView == searchController.searchResultsTableView)
-        return filteredCategories.count;
+    if(theTableView == self.searchDisplayController.searchResultsTableView)
+        return (NSInteger)filteredCategories.count;
     else {
-        return [[categoriesBySection objectAtIndex:section] count];
+        return (NSInteger)[[categoriesBySection objectAtIndex:(NSUInteger)section] count];
     }
 }
 
@@ -116,6 +123,7 @@
     UITableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:@"Cell"];
     if(!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
     
     M5VenueCategory *category = [self categoryForIndexPath:indexPath inTableView:theTableView];
