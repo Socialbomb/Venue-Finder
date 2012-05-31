@@ -12,6 +12,8 @@
 @interface M5PlacemarkAnnotation ()
 
 @property (nonatomic, strong, readwrite) CLPlacemark *placemark;
+@property (nonatomic, copy, readwrite) NSString *title;
+@property (nonatomic, copy, readwrite) NSString *subtitle;
 
 @end
 
@@ -19,6 +21,8 @@
 @implementation M5PlacemarkAnnotation
 
 @synthesize placemark;
+@synthesize title;
+@synthesize subtitle;
 
 -(id)initWithPlacemark:(CLPlacemark *)thePlacemark
 {
@@ -26,8 +30,8 @@
     if(self) {
         self.placemark = thePlacemark;
         
-        _title = placemark.friendlyTitle;
-        _subtitle = placemark.friendlySubtitle;
+        self.title = placemark.friendlyTitle;
+        self.subtitle = placemark.friendlySubtitle;
     }
     
     return self;
@@ -36,16 +40,6 @@
 -(CLLocationCoordinate2D)coordinate
 {
     return self.placemark.location.coordinate;
-}
-
--(NSString *)title
-{
-    return _title;
-}
-
--(NSString *)subtitle
-{
-    return _subtitle;
 }
 
 @end

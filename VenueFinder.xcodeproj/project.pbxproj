@@ -186,8 +186,8 @@
 			isa = PBXGroup;
 			children = (
 				BD28D6111577BE710060BF58 /* Utilities */,
-				BDCAAF8D1523A3BC00E35CD8 /* Resources */,
 				BD23D1E5151A3FC100880922 /* Foursquare */,
+				BDCAAF8D1523A3BC00E35CD8 /* Resources */,
 				BD23D1B7151A3D5B00880922 /* M5AppDelegate.h */,
 				BD23D1B8151A3D5B00880922 /* M5AppDelegate.m */,
 				BD23D1BA151A3D5B00880922 /* M5ViewController.h */,

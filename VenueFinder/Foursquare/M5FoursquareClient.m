@@ -41,7 +41,7 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
     static M5FoursquareClient *staticSharedClient;
     
     dispatch_once(&onceToken, ^{
-        staticSharedClient = [[M5FoursquareClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.foursquare.com/v2/"]];
+        staticSharedClient = [[M5FoursquareClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.foursquare.com"]];
     });
     
     return staticSharedClient;
@@ -99,7 +99,7 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
 {
     if(ignoreCache || !self.cachedCategoriesDate)
     {
-        [self getPath:@"venues/categories" parameters:nil success:^(AFHTTPRequestOperation *operation, id JSON) {
+        [self getPath:@"/v2/venues/categories" parameters:nil success:^(AFHTTPRequestOperation *operation, id JSON) {
             self.cachedCategoriesResponse = operation.responseData;
             [self handleCategoriesResponse:JSON completion:completion];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -143,7 +143,7 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
     if(categoryID)
         [params setObject:categoryID forKey:@"categoryId"];
     
-    [self getPath:@"venues/search" parameters:params success:^(AFHTTPRequestOperation *operation, id JSON) {
+    [self getPath:@"/v2/venues/search" parameters:params success:^(AFHTTPRequestOperation *operation, id JSON) {
         NSArray *venueDicts = [[JSON objectForKey:@"response"] objectForKey:@"venues"];
         
         NSMutableArray *venues = [NSMutableArray arrayWithCapacity:venueDicts.count];
@@ -160,7 +160,7 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
 
 -(NSString *)pathForVenueID:(NSString *)venueID
 {
-    return [@"venues/" stringByAppendingString:venueID];
+    return [@"/v2/venues/" stringByAppendingString:venueID];
 }
 
 -(void)getVenueWithID:(NSString *)venueID completion:(void (^)(M5Venue *))completion failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure

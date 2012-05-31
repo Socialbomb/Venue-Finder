@@ -107,7 +107,7 @@ typedef enum {
         abbreviatedVenue = theAbbreviatedVenue;
         sectionTitles = [NSArray arrayWithObjects:@"Location", @"General Info", @"Stats", @"Categories", @"Tags", @"Metadata", nil];
         
-        self.navigationItem.title = abbreviatedVenue.name;
+        self.title = abbreviatedVenue.name;
         
         UIButton *foursquareButton = [UIButton buttonWithType:UIButtonTypeCustom];
         foursquareButton.frame = CGRectMake(0, 0, 30, 30);
@@ -121,7 +121,17 @@ typedef enum {
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     [self loadVenue];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    // If we're still trying to load the venue, cancel that request
+    if(!venue)
+        [[M5FoursquareClient sharedClient] cancelGetOfVenueID:abbreviatedVenue._id];
 }
 
 -(void)viewDidUnload

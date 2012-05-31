@@ -17,8 +17,8 @@
     NSArray *sectionIndexTitles;
 }
 
--(IBAction)cancelButtonTapped:(id)sender;
--(IBAction)noFilterButtonTapped:(id)sender;
+-(void)cancelButtonTapped:(id)sender;
+-(void)noFilterButtonTapped:(id)sender;
 
 -(M5VenueCategory *)categoryForIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)theTableView;
 
@@ -91,11 +91,13 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
--(IBAction)cancelButtonTapped:(id)sender {
+-(void)cancelButtonTapped:(id)sender
+{
     [self.delegate categoriesControllerDidCancel:self];
 }
 
--(IBAction)noFilterButtonTapped:(id)sender {
+-(void)noFilterButtonTapped:(id)sender
+{
     [self.delegate categoriesController:self didSelectCategory:nil];
 }
 

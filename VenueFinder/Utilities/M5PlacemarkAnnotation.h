@@ -10,10 +10,7 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface M5PlacemarkAnnotation : NSObject <MKAnnotation> {
-    NSString *_title;
-    NSString *_subtitle;
-}
+@interface M5PlacemarkAnnotation : NSObject <MKAnnotation>
 
 @property (nonatomic, strong, readonly) CLPlacemark *placemark;
 
