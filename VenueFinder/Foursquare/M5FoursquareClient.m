@@ -3,12 +3,12 @@
 //  FoursquareBrowser
 //
 //  Created by Tim Clem on 3/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Socialbomb. All rights reserved.
 //
 
 #import "M5FoursquareClient.h"
 #import "AFJSONRequestOperation.h"
-#import "CLLocation+measuring.h"
+#import "CLLocation+Utils.h"
 
 static const int M5FoursquareAPITimeout = 15;
 static const double M5FoursquareMaxSearchAreaMeters = 10000000000;  // The Foursquare docs say the max searchable region is approximately 10,000 sq km

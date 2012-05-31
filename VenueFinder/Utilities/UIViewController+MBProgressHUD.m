@@ -3,12 +3,12 @@
 //  FoursquareBrowser
 //
 //  Created by Tim Clem on 3/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Socialbomb. All rights reserved.
 //
 
-#import "UIViewController+ProgressHUD.h"
+#import "UIViewController+MBProgressHUD.h"
 
-@implementation UIViewController (ProgressHUD)
+@implementation UIViewController (MBProgressHUD)
 
 -(MBProgressHUD *)showHUDFromViewWithText:(NSString *)text details:(NSString *)details dimScreen:(BOOL)dimScreen
 {

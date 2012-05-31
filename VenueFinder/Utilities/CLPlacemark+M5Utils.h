@@ -3,12 +3,12 @@
 //  FoursquareBrowser
 //
 //  Created by Tim Clem on 3/29/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Socialbomb. All rights reserved.
 //
 
 #import <CoreLocation/CoreLocation.h>
 
-@interface CLPlacemark (Utils)
+@interface CLPlacemark (M5Utils)
 
 @property (nonatomic, readonly) NSString *streetAddress;
 @property (nonatomic, readonly) NSString *friendlyTitle;

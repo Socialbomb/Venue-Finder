@@ -3,7 +3,7 @@
 //  FoursquareBrowser
 //
 //  Created by Tim Clem on 3/29/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Socialbomb. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,8 +11,8 @@
 #import <CoreLocation/CoreLocation.h>
 
 @interface M5PlacemarkAnnotation : NSObject <MKAnnotation> {
-    NSString *theTitle;
-    NSString *theSubtitle;
+    NSString *_title;
+    NSString *_subtitle;
 }
 
 @property (nonatomic, strong, readonly) CLPlacemark *placemark;

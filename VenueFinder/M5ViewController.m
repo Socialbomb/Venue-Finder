@@ -3,12 +3,12 @@
 //  FoursquareBrowser
 //
 //  Created by Tim Clem on 3/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Socialbomb. All rights reserved.
 //
 
 #import <MapKit/MapKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "CLLocation+measuring.h"
+#import "CLLocation+Utils.h"
 #import "CLPlacemark+Utils.h"
 #import "SBTableAlert.h"
 #import "M5ViewController.h"

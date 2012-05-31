@@ -3,7 +3,7 @@
 //  FoursquareBrowser
 //
 //  Created by Tim Clem on 3/29/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Socialbomb. All rights reserved.
 //
 
 #import "M5PlacemarkAnnotation.h"
@@ -26,8 +26,8 @@
     if(self) {
         self.placemark = thePlacemark;
         
-        theTitle = placemark.friendlyTitle;
-        theSubtitle = placemark.friendlySubtitle;
+        _title = placemark.friendlyTitle;
+        _subtitle = placemark.friendlySubtitle;
     }
     
     return self;
@@ -40,12 +40,12 @@
 
 -(NSString *)title
 {
-    return theTitle;
+    return _title;
 }
 
 -(NSString *)subtitle
 {
-    return theSubtitle;
+    return _subtitle;
 }
 
 @end

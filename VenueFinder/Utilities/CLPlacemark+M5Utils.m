@@ -3,14 +3,14 @@
 //  FoursquareBrowser
 //
 //  Created by Tim Clem on 3/29/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Socialbomb. All rights reserved.
 //
 
-#import "CLPlacemark+Utils.h"
+#import "CLPlacemark+M5Utils.h"
 
-#define M5NullIfNil(obj) (obj ? obj : [NSNull null])
+NS_INLINE id M5NullIfNil(id obj) { return obj ? obj : [NSNull null]; }
 
-@implementation CLPlacemark (Utils)
+@implementation CLPlacemark (M5Utils)
 
 -(NSString *)streetAddress
 {
