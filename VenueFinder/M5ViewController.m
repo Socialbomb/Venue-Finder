@@ -8,8 +8,8 @@
 
 #import <MapKit/MapKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "CLLocation+Utils.h"
-#import "CLPlacemark+Utils.h"
+#import "CLLocation+M5Utils.h"
+#import "CLPlacemark+M5Utils.h"
 #import "SBTableAlert.h"
 #import "M5ViewController.h"
 #import "M5FoursquareClient.h"
@@ -563,7 +563,7 @@ static const CFTimeInterval minCategoryRefreshInterval = 60.0 * 60.0; // Min tim
                                                orientation:UIImageOrientationUp];
             
             return scaledImg;
-        } cacheName:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        } success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             [categoryButton setImage:image forState:UIControlStateNormal];
         } failure:nil];
         

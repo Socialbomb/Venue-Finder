@@ -25,5 +25,5 @@
     #endif
 
     #import "UIImageView+AFNetworking.h"
-    #import "UIViewController+ProgressHUD.h"
+    #import "UIViewController+MBProgressHUD.h"
 #endif

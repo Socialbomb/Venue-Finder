@@ -7,7 +7,7 @@
 //
 
 #import "M5PlacemarkAnnotation.h"
-#import "CLPlacemark+Utils.h"
+#import "CLPlacemark+M5Utils.h"
 
 @interface M5PlacemarkAnnotation ()
 

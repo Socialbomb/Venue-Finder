@@ -1,0 +1,9 @@
+[submodule "AFNetworking"]
+	path = AFNetworking
+	url = https://github.com/AFNetworking/AFNetworking.git
+[submodule "SBTableAlert"]
+	path = SBTableAlert
+	url = http://github.com/blommegard/SBTableAlert
+[submodule "MBProgressHUD"]
+	path = MBProgressHUD
+	url = https://github.com/jdg/MBProgressHUD.git

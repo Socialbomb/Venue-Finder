@@ -97,12 +97,12 @@
 		BD27F3B515226C2E008B874B /* M5VenueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5VenueViewController.h; sourceTree = "<group>"; };
 		BD27F3B615226C2E008B874B /* M5VenueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5VenueViewController.m; sourceTree = "<group>"; };
 		BD27F3B715226C2F008B874B /* M5VenueViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = M5VenueViewController.xib; sourceTree = "<group>"; };
-		BD28D60E1577BD560060BF58 /* CLLocation+M5Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; path = "CLLocation+M5Utils.h"; sourceTree = "<group>"; };
-		BD28D60F1577BD560060BF58 /* CLLocation+M5Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; path = "CLLocation+M5Utils.m"; sourceTree = "<group>"; };
+		BD28D60E1577BD560060BF58 /* CLLocation+M5Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLLocation+M5Utils.h"; sourceTree = "<group>"; };
+		BD28D60F1577BD560060BF58 /* CLLocation+M5Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+M5Utils.m"; sourceTree = "<group>"; };
 		BD8B2366151A5F5200EA2615 /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		BD8B2367151A5F5200EA2615 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		BD8B236A151A5FF700EA2615 /* UIViewController+MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MBProgressHUD.h"; sourceTree = "<group>"; };
-		BD8B236B151A5FF700EA2615 /* UIViewController+MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; path = "UIViewController+MBProgressHUD.m"; sourceTree = "<group>"; };
+		BD8B236B151A5FF700EA2615 /* UIViewController+MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MBProgressHUD.m"; sourceTree = "<group>"; };
 		BD8B236D151A624C00EA2615 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		BD8B237E151A6BFE00EA2615 /* M5CategoriesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5CategoriesController.h; sourceTree = "<group>"; };
 		BD8B237F151A6BFE00EA2615 /* M5CategoriesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5CategoriesController.m; sourceTree = "<group>"; };
@@ -114,8 +114,8 @@
 		BD912AB11524C9EA0097A59F /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBTableAlert.m; sourceTree = "<group>"; };
 		BD912AB31524E5CF0097A59F /* M5PlacemarkAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5PlacemarkAnnotation.h; sourceTree = "<group>"; };
 		BD912AB41524E5CF0097A59F /* M5PlacemarkAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5PlacemarkAnnotation.m; sourceTree = "<group>"; };
-		BD912AB61524EAF20097A59F /* CLPlacemark+M5Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; path = "CLPlacemark+M5Utils.h"; sourceTree = "<group>"; };
-		BD912AB71524EAF20097A59F /* CLPlacemark+M5Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; path = "CLPlacemark+M5Utils.m"; sourceTree = "<group>"; };
+		BD912AB61524EAF20097A59F /* CLPlacemark+M5Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLPlacemark+M5Utils.h"; sourceTree = "<group>"; };
+		BD912AB71524EAF20097A59F /* CLPlacemark+M5Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLPlacemark+M5Utils.m"; sourceTree = "<group>"; };
 		BD912AC71525131A0097A59F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BDBF6BD6155C18FC00762B0C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../../Icon.png; sourceTree = "<group>"; };
 		BDBF6BD8155C190800762B0C /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../../Icon@2x.png"; sourceTree = "<group>"; };
@@ -244,7 +244,8 @@
 				BD23D1D9151A3F5700880922 /* UIImageView+AFNetworking.h */,
 				BD23D1DA151A3F5700880922 /* UIImageView+AFNetworking.m */,
 			);
-			path = AFNetworking;
+			name = AFNetworking;
+			path = AFNetworking/AFNetworking;
 			sourceTree = "<group>";
 		};
 		BD23D1E5151A3FC100880922 /* Foursquare */ = {
