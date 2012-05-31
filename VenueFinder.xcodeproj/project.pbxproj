@@ -55,7 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BD23D1A4151A3D5B00880922 /* VenueFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VenueFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD23D1A4151A3D5B00880922 /* Venue Finder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Venue Finder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD23D1A8151A3D5B00880922 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BD23D1AA151A3D5B00880922 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BD23D1AC151A3D5B00880922 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -163,7 +163,7 @@
 		BD23D1A5151A3D5B00880922 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BD23D1A4151A3D5B00880922 /* VenueFinder.app */,
+				BD23D1A4151A3D5B00880922 /* Venue Finder.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -330,9 +330,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BD23D1A3151A3D5B00880922 /* VenueFinder */ = {
+		BD23D1A3151A3D5B00880922 /* Venue Finder */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BD23D1C2151A3D5B00880922 /* Build configuration list for PBXNativeTarget "VenueFinder" */;
+			buildConfigurationList = BD23D1C2151A3D5B00880922 /* Build configuration list for PBXNativeTarget "Venue Finder" */;
 			buildPhases = (
 				BD23D1A0151A3D5B00880922 /* Sources */,
 				BD23D1A1151A3D5B00880922 /* Frameworks */,
@@ -342,9 +342,9 @@
 			);
 			dependencies = (
 			);
-			name = VenueFinder;
+			name = "Venue Finder";
 			productName = FoursquareBrowser;
-			productReference = BD23D1A4151A3D5B00880922 /* VenueFinder.app */;
+			productReference = BD23D1A4151A3D5B00880922 /* Venue Finder.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -369,7 +369,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BD23D1A3151A3D5B00880922 /* VenueFinder */,
+				BD23D1A3151A3D5B00880922 /* Venue Finder */,
 			);
 		};
 /* End PBXProject section */
@@ -499,6 +499,7 @@
 		BD23D1C3151A3D5B00880922 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Socialbomb, LLC";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
@@ -506,7 +507,8 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Venue Finder";
+				PROVISIONING_PROFILE = "8F980E3F-63BA-48AA-80D1-DAE03881D3E2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -514,6 +516,7 @@
 		BD23D1C4151A3D5B00880922 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Socialbomb, LLC";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
@@ -521,7 +524,8 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/TestFlightSDK1\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Venue Finder";
+				PROVISIONING_PROFILE = "8F980E3F-63BA-48AA-80D1-DAE03881D3E2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -538,7 +542,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BD23D1C2151A3D5B00880922 /* Build configuration list for PBXNativeTarget "VenueFinder" */ = {
+		BD23D1C2151A3D5B00880922 /* Build configuration list for PBXNativeTarget "Venue Finder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BD23D1C3151A3D5B00880922 /* Debug */,
