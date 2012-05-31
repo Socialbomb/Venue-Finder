@@ -153,11 +153,8 @@
 		BD23D199151A3D5B00880922 = {
 			isa = PBXGroup;
 			children = (
-				BD912AAF1524C9C80097A59F /* SBTableAlert */,
-				BD8B2364151A5F3700EA2615 /* MBProgressHUD */,
-				BD23D1C5151A3F4300880922 /* AFNetworking */,
-				BDCAAFAB1523C01700E35CD8 /* TestFlightSDK1 */,
 				BD23D1AE151A3D5B00880922 /* VenueFinder */,
+				BD28D61C1577C5270060BF58 /* External */,
 				BD23D1A7151A3D5B00880922 /* Frameworks */,
 				BD23D1A5151A3D5B00880922 /* Products */,
 			);
@@ -274,6 +271,17 @@
 				BD28D60F1577BD560060BF58 /* CLLocation+M5Utils.m */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		BD28D61C1577C5270060BF58 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				BD912AAF1524C9C80097A59F /* SBTableAlert */,
+				BD8B2364151A5F3700EA2615 /* MBProgressHUD */,
+				BD23D1C5151A3F4300880922 /* AFNetworking */,
+				BDCAAFAB1523C01700E35CD8 /* TestFlightSDK1 */,
+			);
+			name = External;
 			sourceTree = "<group>";
 		};
 		BD8B2364151A5F3700EA2615 /* MBProgressHUD */ = {

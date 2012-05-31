@@ -24,7 +24,7 @@ typedef enum {
     M5VenueSearchError,
 } M5AlertType;
 
-static const CFTimeInterval minCategoryRefreshInterval = 60.0 * 60.0; // Min time between allowing the user to refresh the categories list (seconds)
+static const CFTimeInterval M5MinCategoryRefreshInterval = 60.0 * 60.0; // Min time between allowing the user to refresh the categories list (seconds)
 
 @interface M5ViewController () <MKMapViewDelegate, UIAlertViewDelegate, M5CategoriesControllerDelegate, SBTableAlertDataSource, SBTableAlertDelegate, UITextFieldDelegate, CLLocationManagerDelegate> {
     M5AlertType currentAlert;
@@ -88,7 +88,7 @@ static const CFTimeInterval minCategoryRefreshInterval = 60.0 * 60.0; // Min tim
 -(void)showRedoSearch;
 -(void)hideRedoSearch;
 
--(void)showAreaTooLargeWarning;  // Call -showRedoSearch first
+-(void)showAreaTooLargeWarning;  // Will show the "Redo Search" area if it's not already visible
 
 -(NSString *)stringWithShortTimeSince:(NSDate *)date;
 
@@ -229,6 +229,8 @@ static const CFTimeInterval minCategoryRefreshInterval = 60.0 * 60.0; // Min tim
 
 -(void)showAreaTooLargeWarning
 {
+    [self showRedoSearch];
+    
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         redoSearchButton.alpha = 0;
         searchAreaTooBigLabel.alpha = 1;
@@ -276,7 +278,7 @@ static const CFTimeInterval minCategoryRefreshInterval = 60.0 * 60.0; // Min tim
     CFTimeInterval then = [[M5FoursquareClient sharedClient].cachedCategoriesDate timeIntervalSince1970];
     CFTimeInterval diff = MAX(1, now - then);
     
-    if(diff < minCategoryRefreshInterval) {
+    if(diff < M5MinCategoryRefreshInterval) {
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
             categoriesWaitLabel.alpha = 1;
             categoriesDateLabel.alpha = 0;
@@ -606,7 +608,6 @@ static const CFTimeInterval minCategoryRefreshInterval = 60.0 * 60.0; // Min tim
 -(void)refreshVenues
 {
     if(![[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region]) {
-        [self showRedoSearch];
         [self showAreaTooLargeWarning];
         
         return;
@@ -661,7 +662,6 @@ static const CFTimeInterval minCategoryRefreshInterval = 60.0 * 60.0; // Min tim
             [self refreshVenues];
         else {
             [self setMapVenues:nil];
-            [self showRedoSearch];
             [self showAreaTooLargeWarning];
         }
     }];
