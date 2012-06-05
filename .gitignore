@@ -1,26 +1,9 @@
-### - Python - ###
-
-*.py[co]
-
-### - OSX - ###
-
 .DS_Store
 ._*
-.Spotlight-V100
-.Trashes
 
-*.mode1v3
-*.pbxuser
-*.perspective 
-*.perspectivev3
-*.pyc 
-*~.nib/
-build/*
-LocationTest/build/*
-
-*/.DS_Store
+*/build/*
 
 *.xcuserdatad
+project.xcworkspace
 
-VenueFinder.xcodeproj/project.xcworkspace
-VenueFinder/IMPORTANT.h
+SecretKeys.h

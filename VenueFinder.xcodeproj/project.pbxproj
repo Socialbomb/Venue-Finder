@@ -91,7 +91,7 @@
 		BD23D1DA151A3F5700880922 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		BD23D1E6151A3FD900880922 /* M5FoursquareClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5FoursquareClient.h; sourceTree = "<group>"; };
 		BD23D1E7151A3FD900880922 /* M5FoursquareClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5FoursquareClient.m; sourceTree = "<group>"; };
-		BD23D1E9151A401300880922 /* IMPORTANT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMPORTANT.h; sourceTree = "<group>"; };
+		BD23D1E9151A401300880922 /* SecretKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SecretKeys.h; path = ../SecretKeys.h; sourceTree = "<group>"; };
 		BD23D1F8151A561B00880922 /* M5VenueCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5VenueCategory.h; sourceTree = "<group>"; };
 		BD23D1F9151A561B00880922 /* M5VenueCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M5VenueCategory.m; sourceTree = "<group>"; };
 		BD27F3B515226C2E008B874B /* M5VenueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M5VenueViewController.h; sourceTree = "<group>"; };
@@ -207,7 +207,7 @@
 		BD23D1AF151A3D5B00880922 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				BD23D1E9151A401300880922 /* IMPORTANT.h */,
+				BD23D1E9151A401300880922 /* SecretKeys.h */,
 				BD23D1B0151A3D5B00880922 /* VenueFinder-Info.plist */,
 				BD23D1B1151A3D5B00880922 /* InfoPlist.strings */,
 				BD23D1B4151A3D5B00880922 /* main.m */,
