@@ -1,6 +1,6 @@
 //
 //  M5VenueCategory.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/21/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -8,12 +8,12 @@
 
 #import "M5VenueCategory.h"
 
-static const int M5PreferredCategoryIconSize = 64;
+static const int M5PreferredCategoryIconSize = 64;  // The API gives us a bunch of icon sizes. This is the one we prefer to pull out for iconURL.
 
 @interface M5VenueCategory ()
 
 @property (nonatomic, weak, readwrite) M5VenueCategory *parentCategory;
-@property (nonatomic, strong, readwrite) NSString *_id;
+@property (nonatomic, strong, readwrite) NSString *categoryID;
 @property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, strong, readwrite) NSString *pluralName;
 @property (nonatomic, assign, readwrite) uint alphabetizationRank;
@@ -22,15 +22,22 @@ static const int M5PreferredCategoryIconSize = 64;
 
 @end
 
+
 @implementation M5VenueCategory
 
-@synthesize name, pluralName, _id, subcategories, iconURL, parentCategory, alphabetizationRank;
+@synthesize name = _name;
+@synthesize pluralName = _pluralName;
+@synthesize categoryID = _categoryID;
+@synthesize subcategories = _subcategories;
+@synthesize iconURL = _iconURL;
+@synthesize parentCategory = _parentCategory;
+@synthesize alphabetizationRank = _alphabetizationRank;
 
 -(id)initWithDictionary:(NSDictionary *)dictionary
 {
     self = [super init];
     if(self) {
-        self._id = [dictionary objectForKey:@"id"];
+        self.categoryID = [dictionary objectForKey:@"id"];
         self.name = [dictionary objectForKey:@"name"];
         self.pluralName = [dictionary objectForKey:@"pluralName"];
         
@@ -109,6 +116,17 @@ static const int M5PreferredCategoryIconSize = 64;
     }
     else
         return [NSString stringWithFormat:@"Root category; %u subcategories", self.subcategories.count];
+}
+
+-(NSComparisonResult)compare:(M5VenueCategory *)other
+{
+    if(self.alphabetizationRank < other.alphabetizationRank)
+        return NSOrderedAscending;
+    
+    if(self.alphabetizationRank > other.alphabetizationRank)
+        return NSOrderedDescending;
+    
+    return [self.name compare:other.name options:NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch];
 }
 
 @end

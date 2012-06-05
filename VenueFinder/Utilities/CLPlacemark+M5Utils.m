@@ -1,6 +1,6 @@
 //
 //  CLPlacemark+Utils.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/29/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -8,7 +8,26 @@
 
 #import "CLPlacemark+M5Utils.h"
 
-NS_INLINE id M5NullIfNil(id obj) { return obj ? obj : [NSNull null]; }
+NS_INLINE id M5NullIfNil(id obj)
+{
+    return obj ? obj : [NSNull null];
+}
+
+NS_INLINE NSString *M5CommaSeparateNonNullElementsOfArray(NSArray *strings)
+{
+    NSMutableString *s;
+    
+    for(NSString *string in strings) {
+        if((id)string != [NSNull null]) {
+            if(s)
+                [s appendFormat:@", %@", string];
+            else
+                s = [string mutableCopy];
+        }
+    }
+    
+    return s;
+}
 
 @implementation CLPlacemark (M5Utils)
 
@@ -55,22 +74,6 @@ NS_INLINE id M5NullIfNil(id obj) { return obj ? obj : [NSNull null]; }
     return nil;
 }
 
-+(NSString *)commaSeparateNonNullElementsOfArray:(NSArray *)strings
-{
-    NSMutableString *s;
-    
-    for(NSString *string in strings) {
-        if((id)string != [NSNull null]) {
-            if(s)
-                [s appendFormat:@", %@", string];
-            else
-                s = [string mutableCopy];
-        }
-    }
-    
-    return s;
-}
-
 -(NSString *)friendlySubtitle
 {
     NSArray *fromDict = [self.addressDictionary objectForKey:@"FormattedAddressLines"];
@@ -79,20 +82,20 @@ NS_INLINE id M5NullIfNil(id obj) { return obj ? obj : [NSNull null]; }
 
     else if(self.name || self.streetAddress)
     {
-        return [CLPlacemark commaSeparateNonNullElementsOfArray:
+        return M5CommaSeparateNonNullElementsOfArray(
                 [NSArray arrayWithObjects:
                  M5NullIfNil(self.locality),
                  M5NullIfNil(self.administrativeArea),
                  M5NullIfNil(self.ISOcountryCode),
-                 nil]];
+                 nil]);
     }
     else if(self.locality)
     {
-        return [CLPlacemark commaSeparateNonNullElementsOfArray:
+        return M5CommaSeparateNonNullElementsOfArray(
                 [NSArray arrayWithObjects:
                  M5NullIfNil(self.administrativeArea),
                  M5NullIfNil(self.ISOcountryCode),
-                 nil]];
+                 nil]);
     }
     else if(self.administrativeArea)
         return self.ISOcountryCode;

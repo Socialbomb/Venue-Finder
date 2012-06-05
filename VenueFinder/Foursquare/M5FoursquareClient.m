@@ -1,6 +1,6 @@
 //
 //  M5FoursquareClient.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/21/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -10,10 +10,11 @@
 #import "AFJSONRequestOperation.h"
 #import "CLLocation+M5Utils.h"
 
-static const int M5FoursquareAPITimeout = 15;
-static const double M5FoursquareMaxSearchAreaMeters = 10000000000;  // The Foursquare docs say the max searchable region is approximately 10,000 sq km
+static const NSTimeInterval M5FoursquareAPITimeout = 15;  // Timeout for API calls in seconds
+static const double M5FoursquareMaxSearchAreaMeters = 10000000000;  // The foursquare™ docs say the max searchable region is approximately 10,000 sq km
 
-static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
+static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";  // Preferences key used to store the creation date of the categories cache
+
 
 @interface M5FoursquareClient ()
 
@@ -23,17 +24,24 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
 @property (nonatomic, readonly) NSString *cachedCategoriesPath;
 @property (nonatomic, strong) NSData *cachedCategoriesResponse;
 
+-(void)handleCategoriesResponse:(NSDictionary *)JSON completion:(void (^)(NSArray *))completion;
+
 -(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories;
 -(NSArray *)flattenCategories:(NSArray *)theCategories;
+
 -(double)areaCoveredByRegion:(MKCoordinateRegion)mapRegion;
+
 -(NSString *)pathForVenueID:(NSString *)venueID;
+
+-(CLLocationCoordinate2D)northeastCornerOfMapRegion:(MKCoordinateRegion)mapRegion;
+-(CLLocationCoordinate2D)southwestCornerOfMapRegion:(MKCoordinateRegion)mapRegion;
 
 @end
 
 
 @implementation M5FoursquareClient
 
-@synthesize venueCategories;
+@synthesize venueCategories = _venueCategories;
 
 +(M5FoursquareClient *)sharedClient
 {
@@ -99,8 +107,13 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
 {
     if(ignoreCache || !self.cachedCategoriesDate)
     {
+        // Forced reload, or we have no cache
+        
         [self getPath:@"/v2/venues/categories" parameters:nil success:^(AFHTTPRequestOperation *operation, id JSON) {
+            // Update the cache
             self.cachedCategoriesResponse = operation.responseData;
+            
+            // Flatten the categories and call back
             [self handleCategoriesResponse:JSON completion:completion];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             if(failure)
@@ -108,10 +121,12 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
         }];
     }
     else {
+        // Load the cache
+        
         NSError *error;
         NSDictionary *cachedResponse = [NSJSONSerialization JSONObjectWithData:self.cachedCategoriesResponse options:0 error:&error];
         if(!cachedResponse) {
-            NSLog(@"Error reading cached venue categories: %@. Reloading from network.", error);
+            NSLog(@"Error reading cached venue categories: %@. Forcing a reload from the network.", error);
             [self getVenueCategoriesIgnoringCache:YES completion:completion failure:failure];
         }
         else {
@@ -127,17 +142,16 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
 
 -(void)getVenuesOfCategory:(NSString *)categoryID inMapRegion:(MKCoordinateRegion)mapRegion completion:(void (^)(NSArray *))completion failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
 {
-    CLLocationCoordinate2D northEastCorner, southWestCorner;
-    northEastCorner.latitude  = mapRegion.center.latitude  + (mapRegion.span.latitudeDelta  / 2.0);
-    northEastCorner.longitude = mapRegion.center.longitude + (mapRegion.span.longitudeDelta / 2.0);
-    southWestCorner.latitude  = mapRegion.center.latitude  - (mapRegion.span.latitudeDelta  / 2.0);
-    southWestCorner.longitude = mapRegion.center.longitude - (mapRegion.span.longitudeDelta / 2.0);
+    // See here for docs on this call: https://developer.foursquare.com/docs/venues/search
+    
+    CLLocationCoordinate2D northeastCorner = [self northeastCornerOfMapRegion:mapRegion];
+    CLLocationCoordinate2D southwestCorner = [self southwestCornerOfMapRegion:mapRegion];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    @"browse", @"intent", 
                                    @"50", @"limit",
-                                   [NSString stringWithFormat:@"%.7f,%.7f", northEastCorner.latitude, northEastCorner.longitude], @"ne",
-                                   [NSString stringWithFormat:@"%.7f,%.7f", southWestCorner.latitude, southWestCorner.longitude], @"sw",
+                                   [NSString stringWithFormat:@"%.7f,%.7f", northeastCorner.latitude, northeastCorner.longitude], @"ne",
+                                   [NSString stringWithFormat:@"%.7f,%.7f", southwestCorner.latitude, southwestCorner.longitude], @"sw",
                                    nil];
     
     if(categoryID)
@@ -183,62 +197,7 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
     [self cancelAllHTTPOperationsWithMethod:@"GET" path:[self pathForVenueID:venueID]];
 }
 
-#pragma mark - Utilities
-
--(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories
-{
-    for(M5VenueCategory *category in someCategories) {
-        [flatCategories addObject:category];
-        
-        if(category.subcategories)
-            [self addToFlatCategories:category.subcategories accumulator:flatCategories];
-    }
-}
-
--(NSArray *)flattenCategories:(NSArray *)theCategories
-{
-    NSMutableArray *flatCategories = [NSMutableArray array];
-    [self addToFlatCategories:theCategories accumulator:flatCategories];
-    
-    [flatCategories sortUsingComparator:^NSComparisonResult(M5VenueCategory *cat1, M5VenueCategory *cat2) {
-        if(cat1.alphabetizationRank < cat2.alphabetizationRank)
-            return NSOrderedAscending;
-        
-        if(cat1.alphabetizationRank > cat2.alphabetizationRank)
-            return NSOrderedDescending;
-        
-        return [cat1.name compare:cat2.name options:NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch];
-    }];
-    
-    return flatCategories;
-}
-
--(M5VenueCategory *)venueCategoryForID:(NSString *)venueCategoryID
-{
-    for(M5VenueCategory *category in self.venueCategories) {
-        if([category._id isEqualToString:venueCategoryID])
-            return category;
-    }
-    
-    return nil;
-}
-
--(double)areaCoveredByRegion:(MKCoordinateRegion)mapRegion
-{
-    CLLocationCoordinate2D northEastCorner, southEastCorner, southWestCorner;
-    northEastCorner.latitude  = mapRegion.center.latitude  + (mapRegion.span.latitudeDelta  / 2.0);
-    northEastCorner.longitude = mapRegion.center.longitude + (mapRegion.span.longitudeDelta / 2.0);
-    southWestCorner.latitude  = mapRegion.center.latitude  - (mapRegion.span.latitudeDelta  / 2.0);
-    southWestCorner.longitude = mapRegion.center.longitude - (mapRegion.span.longitudeDelta / 2.0);
-    
-    southEastCorner.latitude = southWestCorner.latitude;
-    southEastCorner.longitude = northEastCorner.longitude;
-    
-    CLLocationDistance height = [CLLocation distanceFromCoordinate:northEastCorner toCoordinate:southEastCorner];
-    CLLocationDistance width = [CLLocation distanceFromCoordinate:southWestCorner toCoordinate:southEastCorner];
-    
-    return width * height;
-}
+#pragma mark - Cache management
 
 -(void)setCachedCategoriesDate:(NSDate *)cachedCategoriesDate
 {
@@ -259,8 +218,8 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
 -(void)setCachedCategoriesResponse:(NSData *)cachedCategoriesResponse
 {
     if([[NSFileManager defaultManager] createFileAtPath:self.cachedCategoriesPath
-                                            contents:cachedCategoriesResponse
-                                          attributes:nil])
+                                               contents:cachedCategoriesResponse
+                                             attributes:nil])
     {
         self.cachedCategoriesDate = [NSDate date];
     }
@@ -270,6 +229,61 @@ static NSString * const M5CachedCategoriesDateKey = @"M5CachedCategoriesDate";
 {
     NSData *contents = [[NSFileManager defaultManager] contentsAtPath:self.cachedCategoriesPath];
     return contents;
+}
+
+#pragma mark - Utilities
+
+-(void)addToFlatCategories:(NSArray *)someCategories accumulator:(NSMutableArray *)flatCategories
+{
+    for(M5VenueCategory *category in someCategories) {
+        [flatCategories addObject:category];
+        
+        if(category.subcategories)
+            [self addToFlatCategories:category.subcategories accumulator:flatCategories];
+    }
+}
+
+-(NSArray *)flattenCategories:(NSArray *)theCategories
+{
+    NSMutableArray *flatCategories = [NSMutableArray array];
+    [self addToFlatCategories:theCategories accumulator:flatCategories];
+    [flatCategories sortUsingSelector:@selector(compare:)];
+    
+    return flatCategories;
+}
+
+-(M5VenueCategory *)venueCategoryForID:(NSString *)venueCategoryID
+{
+    for(M5VenueCategory *category in self.venueCategories) {
+        if([category.categoryID isEqualToString:venueCategoryID])
+            return category;
+    }
+    
+    return nil;
+}
+
+-(double)areaCoveredByRegion:(MKCoordinateRegion)mapRegion
+{
+    CLLocationCoordinate2D northeastCorner = [self northeastCornerOfMapRegion:mapRegion];
+    CLLocationCoordinate2D southwestCorner = [self southwestCornerOfMapRegion:mapRegion];
+    CLLocationCoordinate2D southeastCorner = CLLocationCoordinate2DMake(southwestCorner.latitude, northeastCorner.longitude);
+    
+    CLLocationDistance height = [CLLocation distanceFromCoordinate:northeastCorner toCoordinate:southeastCorner];
+    CLLocationDistance width = [CLLocation distanceFromCoordinate:southwestCorner toCoordinate:southeastCorner];
+    
+    return width * height;
+}
+
+-(CLLocationCoordinate2D)northeastCornerOfMapRegion:(MKCoordinateRegion)mapRegion
+{
+    return CLLocationCoordinate2DMake(mapRegion.center.latitude  + (mapRegion.span.latitudeDelta  / 2.0),
+                                      mapRegion.center.longitude + (mapRegion.span.longitudeDelta / 2.0));
+}
+
+-(CLLocationCoordinate2D)southwestCornerOfMapRegion:(MKCoordinateRegion)mapRegion
+{
+    return CLLocationCoordinate2DMake(mapRegion.center.latitude  - (mapRegion.span.latitudeDelta  / 2.0),
+                                      mapRegion.center.longitude - (mapRegion.span.longitudeDelta / 2.0));
 }
 
 @end

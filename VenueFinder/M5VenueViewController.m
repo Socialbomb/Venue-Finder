@@ -1,6 +1,6 @@
 //
 //  M5VenueViewController.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/27/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -20,6 +20,7 @@ typedef enum {
 } M5VenueTableSection;
 
 
+// Holder for properties of a cell.
 @interface M5VenueCellData : NSObject
 
 @property (nonatomic, strong) NSString *name;
@@ -61,6 +62,9 @@ typedef enum {
 
 -(void)handleSelection:(NSIndexPath *)indexPath
 {
+    // The static analyzer freaks out about this under ARC because the selecter we
+    // perform may have retain/release implications. In our cases it doesn't,
+    // so we tell the analyzer to chill out:
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     [target performSelector:selector withObject:self withObject:indexPath];
@@ -70,7 +74,7 @@ typedef enum {
 @end
 
 
-@interface M5VenueViewController () {
+@interface M5VenueViewController () <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate> {
     M5Venue *venue;
     M5Venue *abbreviatedVenue;
     NSArray *cellDataBySection;
@@ -98,7 +102,7 @@ typedef enum {
 
 @implementation M5VenueViewController
 
-@synthesize tableView;
+@synthesize tableView = _tableView;
 
 -(id)initWithAbbreviatedVenue:(M5Venue *)theAbbreviatedVenue
 {
@@ -131,7 +135,7 @@ typedef enum {
     
     // If we're still trying to load the venue, cancel that request
     if(!venue)
-        [[M5FoursquareClient sharedClient] cancelGetOfVenueID:abbreviatedVenue._id];
+        [[M5FoursquareClient sharedClient] cancelGetOfVenueID:abbreviatedVenue.venueID];
 }
 
 -(void)viewDidUnload
@@ -176,8 +180,11 @@ typedef enum {
 
 -(void)loadVenue
 {
+    // Not blocking; the user can back out while this is loading (in which case we stop the request;
+    // see -viewWillDisappear:).
     [self showHUDFromViewWithText:@"Loading" details:@"fetching venue" dimScreen:NO];
-    [[M5FoursquareClient sharedClient] getVenueWithID:abbreviatedVenue._id completion:^(M5Venue *fullVenue) {
+    
+    [[M5FoursquareClient sharedClient] getVenueWithID:abbreviatedVenue.venueID completion:^(M5Venue *fullVenue) {
         [self hideAllHUDsFromView];
         
         venue = fullVenue;
@@ -232,7 +239,7 @@ typedef enum {
     }
     
     NSMutableArray *metadataData = [NSMutableArray array];
-    [self addCellDataToArray:metadataData name:@"ID" value:venue._id copyable:YES];
+    [self addCellDataToArray:metadataData name:@"ID" value:venue.venueID copyable:YES];
     if(venue.createdAt) {
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateStyle = NSDateFormatterShortStyle;
@@ -253,6 +260,8 @@ typedef enum {
 
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
+    // The API error dialog; options are to cancel, retry, or load the venue web page
+    
     if(buttonIndex == alertView.cancelButtonIndex)
         [self dismissModalViewControllerAnimated:YES];
     else if(buttonIndex == alertView.firstOtherButtonIndex)
@@ -285,15 +294,17 @@ typedef enum {
     
     M5VenueCellData *data = [self cellDataForIndexPath:indexPath];
     NSString *reuseIdentifier = data.subtitleCellStyle ? @"SubtitleCell" : @"Cell";
-    UITableViewCellStyle cellStyle = data.subtitleCellStyle ? UITableViewCellStyleSubtitle : UITableViewCellStyleValue2;
     
     UITableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if(!cell) {
+        UITableViewCellStyle cellStyle = data.subtitleCellStyle ? UITableViewCellStyleSubtitle : UITableViewCellStyleValue2;
         cell = [[UITableViewCell alloc] initWithStyle:cellStyle reuseIdentifier:reuseIdentifier];
     }
     
     cell.textLabel.text = data.name;
     cell.detailTextLabel.text = data.value;
+    
+    // Selectable if the cell data has an action associated with it.
     cell.selectionStyle = (data.target && data.selector) ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
     
     return cell;
@@ -331,7 +342,8 @@ typedef enum {
     M5VenueCellData *data = [self cellDataForIndexPath:indexPath];
     [data handleSelection:indexPath];
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    // Momentary selection...
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Utilities

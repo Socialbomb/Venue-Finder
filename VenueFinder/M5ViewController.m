@@ -1,6 +1,6 @@
 //
 //  M5ViewController.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/21/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -24,7 +24,9 @@ typedef enum {
     M5VenueSearchError,
 } M5AlertType;
 
-static const CFTimeInterval M5MinCategoryRefreshInterval = 60.0 * 60.0; // Min time between allowing the user to refresh the categories list (seconds)
+// Min time between allowing the user to refresh the categories list (seconds).
+// The docs here https://developer.foursquare.com/docs/venues/categories say not to do this more than once a session.
+static const CFTimeInterval M5MinCategoryRefreshInterval = 60.0 * 60.0;
 
 @interface M5ViewController () <MKMapViewDelegate, UIAlertViewDelegate, M5CategoriesControllerDelegate, SBTableAlertDataSource, SBTableAlertDelegate, UITextFieldDelegate, CLLocationManagerDelegate> {
     M5AlertType currentAlert;
@@ -148,9 +150,9 @@ static const CFTimeInterval M5MinCategoryRefreshInterval = 60.0 * 60.0; // Min t
     [toolbarItems insertObject:userTrackingButton atIndex:0];
     toolbar.items = toolbarItems;
     
-    curlContainer.backgroundColor = [UIColor underPageBackgroundColor];
+    curlContainer.backgroundColor = [UIColor underPageBackgroundColor];  // This one's not available in IB for some reason
     
-    categoryButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    categoryButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);  // Add some padding between the category icon and the text
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -174,6 +176,8 @@ static const CFTimeInterval M5MinCategoryRefreshInterval = 60.0 * 60.0; // Min t
 {
     [super viewWillDisappear:animated];
     
+    // If a new controller is getting pushed on the stack, show the nav bar for it.
+    // If it's just a modal (e.g. the category selector), do nothing.
     if(self.navigationController.topViewController != self)
         [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
@@ -222,9 +226,8 @@ static const CFTimeInterval M5MinCategoryRefreshInterval = 60.0 * 60.0; // Min t
 {
     if([[M5FoursquareClient sharedClient] mapRegionIsOfSearchableArea:mapView.region])    
         [self refreshVenues];
-    else {
+    else
         [self showAreaTooLargeWarning];
-    }
 }
 
 -(void)showAreaTooLargeWarning
@@ -530,7 +533,7 @@ static const CFTimeInterval M5MinCategoryRefreshInterval = 60.0 * 60.0; // Min t
 
 #pragma mark - UITextFieldDelegate
 
-// We are the delegate of the text field in the dialog box that comes up when you hit 'Go to...'
+// We are the delegate of the text field in the dialog box that comes up when you hit the location search button
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [goAlert dismissWithClickedButtonIndex:goAlert.firstOtherButtonIndex animated:YES];
@@ -614,7 +617,7 @@ static const CFTimeInterval M5MinCategoryRefreshInterval = 60.0 * 60.0; // Min t
     }
     
     [self showHUDFromViewWithText:@"Searching" details:@"finding venues" dimScreen:YES];
-    [[M5FoursquareClient sharedClient] getVenuesOfCategory:currentCategory._id
+    [[M5FoursquareClient sharedClient] getVenuesOfCategory:currentCategory.categoryID
                                                inMapRegion:mapView.region
                                                 completion:^(NSArray *venues) {
                                                     [self hideRedoSearch];

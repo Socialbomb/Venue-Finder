@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'FoursquareBrowser' target in the 'FoursquareBrowser' project
+// Prefix header for all source files of the 'VenueFinder' target in the 'VenueFinder' project
 //
 
 #import <Availability.h>
@@ -16,11 +16,13 @@
     #ifdef M5TestFlightTeamToken
         #define TESTFLIGHT
         
-        // The beta 1 SDK of TestFlight no longer collects UDIDs by default.
-        // Comment out this line to stop using them:
+        // As of version 1.0, the TestFlight SDK no longer collects UDIDs by default.
+        // Uncomment this line to force their use.
         //#define TESTFLIGHT_USE_UDID
 
+        // Uncomment this line to send all NSLog messages to TestFlight.
         #define NSLog TFLog
+
         #import "TestFlight.h"
     #endif
 

@@ -1,6 +1,6 @@
 //
 //  M5Venue.h
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/21/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -41,7 +41,7 @@
 
 @interface M5Venue : NSObject <MKAnnotation>
 
-@property (nonatomic, strong, readonly) NSString *_id;
+@property (nonatomic, strong, readonly) NSString *venueID;
 @property (nonatomic, strong, readonly) NSURL *venueURL;
 @property (nonatomic, strong, readonly) NSString *name;
 @property (nonatomic, strong, readonly) NSString *venueDescription;

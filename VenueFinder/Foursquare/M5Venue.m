@@ -1,6 +1,6 @@
 //
 //  M5Venue.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/21/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -93,7 +93,7 @@
 
 @interface M5Venue ()
 
-@property (nonatomic, strong, readwrite) NSString *_id;
+@property (nonatomic, strong, readwrite) NSString *venueID;
 @property (nonatomic, strong, readwrite) NSURL *venueURL;
 @property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, strong, readwrite) NSString *venueDescription;
@@ -111,20 +111,24 @@
 @property (nonatomic, strong, readwrite) NSArray *tags;
 @property (nonatomic, strong, readwrite) NSArray *categories;  // The primary category is always first
 
+// Read-write redefinitions of properties from MKAnnotation
+@property (nonatomic, copy, readwrite) NSString *title;
+@property (nonatomic, assign, readwrite) CLLocationCoordinate2D coordinate;
+
 @end
 
 
 @implementation M5Venue
 
-@synthesize _id, name, location, stats, venueURL, tags, title, subtitle, verified, createdAt, categories, coordinate, websiteURL, venueDescription, formattedPhoneNumber, phoneNumber, twitterHandle;
+@synthesize venueID, name, location, stats, venueURL, tags, title, subtitle, verified, createdAt, categories, coordinate, websiteURL, venueDescription, formattedPhoneNumber, phoneNumber, twitterHandle;
 
 -(id)initWithDictionary:(NSDictionary *)dictionary
 {
     self = [super init];
     if(self) {
-        self._id = [dictionary objectForKey:@"id"];
+        self.venueID = [dictionary objectForKey:@"id"];
         self.name = [dictionary objectForKey:@"name"];
-        self.venueURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://foursquare.com/v/%@", self._id]];
+        self.venueURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://foursquare.com/v/%@", self.venueID]];
         self.venueDescription = [dictionary objectForKey:@"description"];
         
         if([dictionary objectForKey:@"createdAt"])
@@ -147,10 +151,19 @@
         if(categoryDicts.count > 0) {
             M5VenueCategory *primaryCategory;
             
+            // Cross-reference the category IDs with our list of actual category objects.
+            // Pull out the primary category and add it to the top of the list, if there
+            // are multiple. Sort the remaining categories.
+            
             NSMutableArray *mutableCategories = [NSMutableArray arrayWithCapacity:categoryDicts.count];
             for(NSDictionary *dict in categoryDicts) {
                 NSString *categoryID = [dict objectForKey:@"id"];
                 M5VenueCategory *category = [[M5FoursquareClient sharedClient] venueCategoryForID:categoryID];
+                
+                if(!category) {
+                    NSLog(@"A venue is part of a category ID we don't have in our list of categories: %@", categoryID);
+                    continue;
+                }
                 
                 if([[dict objectForKey:@"primary"] intValue] == 1)
                     primaryCategory = category;
@@ -158,32 +171,24 @@
                     [mutableCategories addObject:category];
             }
             
-            [mutableCategories sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+            [mutableCategories sortUsingSelector:@selector(compare:)];
             
             if(primaryCategory)
                 [mutableCategories insertObject:primaryCategory atIndex:0];
             
             self.categories = mutableCategories;
         }
+        
+        // MKAnnotation stuff
+        self.title = self.name;
+        self.coordinate = self.location.coordinate;
     }
     
     return self;
 }
 
 -(NSString *) description {
-	return [NSString stringWithFormat:@"%@ (%@)", self.name, self._id];
-}
-
-#pragma mark MKAnnotation implementation
-
--(NSString *)title
-{
-    return self.name;
-}
-
--(CLLocationCoordinate2D)coordinate
-{
-    return self.location.coordinate;
+	return [NSString stringWithFormat:@"%@ (%@)", self.name, self.venueID];
 }
 
 @end

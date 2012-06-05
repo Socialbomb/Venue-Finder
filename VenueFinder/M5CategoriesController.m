@@ -1,6 +1,6 @@
 //
 //  M5CategoriesController.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/21/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -29,8 +29,8 @@
 
 @implementation M5CategoriesController
 
-@synthesize tableView;
-@synthesize delegate;
+@synthesize tableView = _tableView;
+@synthesize delegate = _delegate;
 
 -(id)initWithCategories:(NSArray *)theCategories
 {
@@ -49,6 +49,9 @@
         for(uint i = 0; i < 27; i++)
             [categoriesBySection addObject:[NSMutableArray array]];
         
+        // The categories are assumed to be sorted already; we break them into sections based
+        // on their alphabetizationRank (a diacritic-free representation of the first non-whitespace
+        // character in their name).
         for(M5VenueCategory *category in categories) {
             NSMutableArray *sectionArray = [categoriesBySection objectAtIndex:category.alphabetizationRank];
             [sectionArray addObject:category];
@@ -77,7 +80,7 @@
     [super viewDidLoad];
     
     // Scroll the search bar offscreen
-    tableView.contentOffset = CGPointMake(0, self.searchDisplayController.searchBar.frame.size.height);
+    self.tableView.contentOffset = CGPointMake(0, self.searchDisplayController.searchBar.frame.size.height);
 }
 
 -(void)viewDidUnload
@@ -103,7 +106,7 @@
 
 -(M5VenueCategory *)categoryForIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)theTableView
 {
-    if(theTableView == tableView)
+    if(theTableView == self.tableView)
         return [[categoriesBySection objectAtIndex:(NSUInteger)indexPath.section] objectAtIndex:(NSUInteger)indexPath.row];
     
     return [filteredCategories objectAtIndex:(NSUInteger)indexPath.row];  // Search results
@@ -162,7 +165,7 @@
 {
     if(action == @selector(copy:)) {
         M5VenueCategory *category = [self categoryForIndexPath:indexPath inTableView:theTableView];
-        [UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"%@ - %@", category.name, category._id];
+        [UIPasteboard generalPasteboard].string = [NSString stringWithFormat:@"%@ - %@", category.name, category.categoryID];
     }
 }
 
@@ -170,7 +173,7 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)theTableView
 {
-    if(theTableView == tableView)
+    if(theTableView == self.tableView)
         return 27;  // A-Z, #
     
     return 1;  // The search results view
@@ -178,23 +181,24 @@
 
 -(NSInteger)tableView:(UITableView *)theTableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    if(theTableView != tableView) {
+    if(theTableView != self.tableView) {
         // The search results table view
         return NSNotFound;
     }
     
     if(index == 0) {
         // The search "section"
-        [tableView setContentOffset:CGPointZero animated:NO];
+        [self.tableView setContentOffset:CGPointZero animated:NO];
         return NSNotFound;
     }
     
+    // Offset by 1 to account for the fake search section
     return index - 1;
 }
 
 -(NSArray *)sectionIndexTitlesForTableView:(UITableView *)theTableView
 {
-    if(theTableView == tableView)
+    if(theTableView == self.tableView)
         return sectionIndexTitles;
     
     // No index in the search results view
@@ -205,10 +209,13 @@
 
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
+    // Find categories with the substring in their name or their parent category's name.
+    
     filteredCategories = [categories filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
         M5VenueCategory *category = (M5VenueCategory *)evaluatedObject;
-        if([category.name rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound ||
-           (category.parentCategory && [category.parentCategory.name rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound))
+        if([category.name rangeOfString:searchString options:NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch].location != NSNotFound ||
+           (category.parentCategory &&
+            [category.parentCategory.name rangeOfString:searchString options:NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch].location != NSNotFound))
         {
             return YES;
         }

@@ -1,6 +1,6 @@
 //
 //  M5PlacemarkAnnotation.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/29/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -12,34 +12,35 @@
 @interface M5PlacemarkAnnotation ()
 
 @property (nonatomic, strong, readwrite) CLPlacemark *placemark;
+
+// Re-define properties from MKAnnotation to be readwrite,
+// so we can assign to them in order to implement the protocol.
 @property (nonatomic, copy, readwrite) NSString *title;
 @property (nonatomic, copy, readwrite) NSString *subtitle;
+@property (nonatomic, assign, readwrite) CLLocationCoordinate2D coordinate;
 
 @end
 
 
 @implementation M5PlacemarkAnnotation
 
-@synthesize placemark;
-@synthesize title;
-@synthesize subtitle;
+@synthesize placemark = _placemark;
+@synthesize title = _title;
+@synthesize subtitle = _subtitle;
+@synthesize coordinate = _coordinate;
 
--(id)initWithPlacemark:(CLPlacemark *)thePlacemark
+-(id)initWithPlacemark:(CLPlacemark *)placemark
 {
     self = [super init];
     if(self) {
-        self.placemark = thePlacemark;
+        self.placemark = placemark;
         
-        self.title = placemark.friendlyTitle;
-        self.subtitle = placemark.friendlySubtitle;
+        self.title = self.placemark.friendlyTitle;
+        self.subtitle = self.placemark.friendlySubtitle;
+        self.coordinate = self.placemark.location.coordinate;
     }
     
     return self;
-}
-
--(CLLocationCoordinate2D)coordinate
-{
-    return self.placemark.location.coordinate;
 }
 
 @end

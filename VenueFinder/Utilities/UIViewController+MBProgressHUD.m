@@ -1,6 +1,6 @@
 //
 //  UIViewController+ProgressHUD.m
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/21/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.
@@ -23,16 +23,6 @@
 -(MBProgressHUD *)showHUDFromViewWithText:(NSString *)text details:(NSString *)details
 {
     return [self showHUDFromViewWithText:text details:details dimScreen:NO];
-}
-
--(MBProgressHUD *)showHUDFromViewWithText:(NSString *)text dimScreen:(BOOL)dimScreen
-{
-    return [self showHUDFromViewWithText:text details:nil dimScreen:dimScreen];
-}
-
--(MBProgressHUD *)showHUDFromViewWithText:(NSString *)text
-{
-    return [self showHUDFromViewWithText:text details:nil dimScreen:NO];
 }
 
 -(void)hideAllHUDsFromView

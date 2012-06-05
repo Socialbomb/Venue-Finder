@@ -1,6 +1,6 @@
 //
 //  M5AppDelegate.h
-//  FoursquareBrowser
+//  Venue Finder
 //
 //  Created by Tim Clem on 3/21/12.
 //  Copyright (c) 2012 Socialbomb. All rights reserved.

@@ -10,6 +10,9 @@
 
 @interface CLLocation (M5Utils)
 
+// Convenience method to get the distance between two CLLocationCoordinate2D objects.
+// Creates two CLLocation objects and uses -distanceFromLocation: to calculate
+// the distance.
 +(CLLocationDistance)distanceFromCoordinate:(CLLocationCoordinate2D)fromCoord toCoordinate:(CLLocationCoordinate2D)toCoord;
 
 @end
