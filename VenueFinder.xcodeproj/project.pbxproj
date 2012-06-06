@@ -31,6 +31,7 @@
 		BD27F3B915226C2F008B874B /* M5VenueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD27F3B715226C2F008B874B /* M5VenueViewController.xib */; };
 		BD28D6101577BD560060BF58 /* CLLocation+M5Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD28D60F1577BD560060BF58 /* CLLocation+M5Utils.m */; };
 		BD8081F9157FADF60006A417 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD8081F7157FADF60006A417 /* libTestFlight.a */; };
+		BD8081FB157FB0FE0006A417 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD8081FA157FB0FE0006A417 /* Settings.bundle */; };
 		BD8B2368151A5F5400EA2615 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8B2367151A5F5200EA2615 /* MBProgressHUD.m */; };
 		BD8B236C151A5FF700EA2615 /* UIViewController+MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8B236B151A5FF700EA2615 /* UIViewController+MBProgressHUD.m */; };
 		BD8B236E151A624C00EA2615 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD8B236D151A624C00EA2615 /* MapKit.framework */; };
@@ -101,6 +102,7 @@
 		BD28D60F1577BD560060BF58 /* CLLocation+M5Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+M5Utils.m"; sourceTree = "<group>"; };
 		BD8081F7157FADF60006A417 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		BD8081F8157FADF60006A417 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		BD8081FA157FB0FE0006A417 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		BD8B2366151A5F5200EA2615 /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		BD8B2367151A5F5200EA2615 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		BD8B236A151A5FF700EA2615 /* UIViewController+MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MBProgressHUD.h"; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 				BDFDE3E6155B15190063AEA4 /* foursquare-icon-36x36.png */,
 				BDFDE3EB155B18B10063AEA4 /* 44-shoebox.png */,
 				BDFDE3EC155B18B10063AEA4 /* 44-shoebox@2x.png */,
+				BD8081FA157FB0FE0006A417 /* Settings.bundle */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 				BDBF6BD9155C190800762B0C /* Icon@2x.png in Resources */,
 				BDBF6BDB155C41D000762B0C /* Default.png in Resources */,
 				BDBF6BDD155C41D200762B0C /* Default@2x.png in Resources */,
+				BD8081FB157FB0FE0006A417 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,7 +503,7 @@
 		BD23D1C3151A3D5B00880922 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Socialbomb, LLC";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tim Clem (FR5UGCV7R7)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
@@ -508,7 +512,7 @@
 					"\"$(SRCROOT)/TestFlight-SDK\"",
 				);
 				PRODUCT_NAME = "Venue Finder";
-				PROVISIONING_PROFILE = "8F980E3F-63BA-48AA-80D1-DAE03881D3E2";
+				PROVISIONING_PROFILE = "8DEEC147-7FF4-4093-968C-81DCB755B258";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -516,7 +520,7 @@
 		BD23D1C4151A3D5B00880922 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Socialbomb, LLC";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tim Clem (FR5UGCV7R7)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
@@ -525,7 +529,7 @@
 					"\"$(SRCROOT)/TestFlight-SDK\"",
 				);
 				PRODUCT_NAME = "Venue Finder";
-				PROVISIONING_PROFILE = "8F980E3F-63BA-48AA-80D1-DAE03881D3E2";
+				PROVISIONING_PROFILE = "8DEEC147-7FF4-4093-968C-81DCB755B258";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>FooterText</key>
+			<string>Distributed under the MIT license;
+full source available at
+github.com/Socialbomb.
+
+Some icons by Glyphish, glyphish.com.
+
+
+Special thanks to:
+
+SBTableAlert
+github.com/blommegard
+
+MBProgressHUD
+github.com/jdg
+
+AFNetworking
+github.com/AFNetworking</string>
+		</dict>
+	</array>
+	<key>StringsTable</key>
+	<string>Legal</string>
+</dict>
+</plist>

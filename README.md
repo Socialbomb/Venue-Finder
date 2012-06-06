@@ -36,3 +36,5 @@ But moreover, it is our hope that this project serves as useful non-trivial exam
 License
 -------
 Venue Finder is available under the MIT license. See the LICENSE file for details.
+
+Some icons are by [Glyphish](http://glyphish.com) and covered by the Creative Commons Attribution License. See GlyphishLicense.txt for details.
