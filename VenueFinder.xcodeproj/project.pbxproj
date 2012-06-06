@@ -30,6 +30,7 @@
 		BD27F3B815226C2F008B874B /* M5VenueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD27F3B615226C2E008B874B /* M5VenueViewController.m */; };
 		BD27F3B915226C2F008B874B /* M5VenueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD27F3B715226C2F008B874B /* M5VenueViewController.xib */; };
 		BD28D6101577BD560060BF58 /* CLLocation+M5Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD28D60F1577BD560060BF58 /* CLLocation+M5Utils.m */; };
+		BD8081F9157FADF60006A417 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD8081F7157FADF60006A417 /* libTestFlight.a */; };
 		BD8B2368151A5F5400EA2615 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8B2367151A5F5200EA2615 /* MBProgressHUD.m */; };
 		BD8B236C151A5FF700EA2615 /* UIViewController+MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8B236B151A5FF700EA2615 /* UIViewController+MBProgressHUD.m */; };
 		BD8B236E151A624C00EA2615 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD8B236D151A624C00EA2615 /* MapKit.framework */; };
@@ -47,7 +48,6 @@
 		BDBF6BDD155C41D200762B0C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDBF6BDC155C41D200762B0C /* Default@2x.png */; };
 		BDCAAF7D15237C2000E35CD8 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7B15237C2000E35CD8 /* blank.png */; };
 		BDCAAF7E15237C2000E35CD8 /* blank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCAAF7C15237C2000E35CD8 /* blank@2x.png */; };
-		BDCAAFB01523C01700E35CD8 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */; };
 		BDCAAFB41523C0A600E35CD8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCAAFB31523C0A600E35CD8 /* libz.dylib */; };
 		BDFDE3E7155B15190063AEA4 /* foursquare-icon-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = BDFDE3E6155B15190063AEA4 /* foursquare-icon-36x36.png */; };
 		BDFDE3EF155B18B10063AEA4 /* 44-shoebox.png in Resources */ = {isa = PBXBuildFile; fileRef = BDFDE3EB155B18B10063AEA4 /* 44-shoebox.png */; };
@@ -99,6 +99,8 @@
 		BD27F3B715226C2F008B874B /* M5VenueViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = M5VenueViewController.xib; sourceTree = "<group>"; };
 		BD28D60E1577BD560060BF58 /* CLLocation+M5Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLLocation+M5Utils.h"; sourceTree = "<group>"; };
 		BD28D60F1577BD560060BF58 /* CLLocation+M5Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+M5Utils.m"; sourceTree = "<group>"; };
+		BD8081F7157FADF60006A417 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		BD8081F8157FADF60006A417 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		BD8B2366151A5F5200EA2615 /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		BD8B2367151A5F5200EA2615 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		BD8B236A151A5FF700EA2615 /* UIViewController+MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MBProgressHUD.h"; sourceTree = "<group>"; };
@@ -123,8 +125,6 @@
 		BDBF6BDC155C41D200762B0C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../../Default@2x.png"; sourceTree = "<group>"; };
 		BDCAAF7B15237C2000E35CD8 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
 		BDCAAF7C15237C2000E35CD8 /* blank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank@2x.png"; sourceTree = "<group>"; };
-		BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		BDCAAFAF1523C01700E35CD8 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		BDCAAFB31523C0A600E35CD8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BDFDE3E6155B15190063AEA4 /* foursquare-icon-36x36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "foursquare-icon-36x36.png"; sourceTree = "<group>"; };
 		BDFDE3EB155B18B10063AEA4 /* 44-shoebox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "44-shoebox.png"; sourceTree = "<group>"; };
@@ -143,7 +143,7 @@
 				BD23D1A9151A3D5B00880922 /* UIKit.framework in Frameworks */,
 				BD23D1AB151A3D5B00880922 /* Foundation.framework in Frameworks */,
 				BD23D1AD151A3D5B00880922 /* CoreGraphics.framework in Frameworks */,
-				BDCAAFB01523C01700E35CD8 /* libTestFlight.a in Frameworks */,
+				BD8081F9157FADF60006A417 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,9 +279,18 @@
 				BD912AAF1524C9C80097A59F /* SBTableAlert */,
 				BD8B2364151A5F3700EA2615 /* MBProgressHUD */,
 				BD23D1C5151A3F4300880922 /* AFNetworking */,
-				BDCAAFAB1523C01700E35CD8 /* TestFlightSDK1 */,
+				BD8081F6157FADD20006A417 /* TestFlight-SDK */,
 			);
 			name = External;
+			sourceTree = "<group>";
+		};
+		BD8081F6157FADD20006A417 /* TestFlight-SDK */ = {
+			isa = PBXGroup;
+			children = (
+				BD8081F7157FADF60006A417 /* libTestFlight.a */,
+				BD8081F8157FADF60006A417 /* TestFlight.h */,
+			);
+			path = "TestFlight-SDK";
 			sourceTree = "<group>";
 		};
 		BD8B2364151A5F3700EA2615 /* MBProgressHUD */ = {
@@ -316,15 +325,6 @@
 				BDFDE3EC155B18B10063AEA4 /* 44-shoebox@2x.png */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		BDCAAFAB1523C01700E35CD8 /* TestFlightSDK1 */ = {
-			isa = PBXGroup;
-			children = (
-				BDCAAFAC1523C01700E35CD8 /* libTestFlight.a */,
-				BDCAAFAF1523C01700E35CD8 /* TestFlight.h */,
-			);
-			path = TestFlightSDK1;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -505,7 +505,7 @@
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/TestFlightSDK1\"",
+					"\"$(SRCROOT)/TestFlight-SDK\"",
 				);
 				PRODUCT_NAME = "Venue Finder";
 				PROVISIONING_PROFILE = "8F980E3F-63BA-48AA-80D1-DAE03881D3E2";
@@ -522,7 +522,7 @@
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/TestFlightSDK1\"",
+					"\"$(SRCROOT)/TestFlight-SDK\"",
 				);
 				PRODUCT_NAME = "Venue Finder";
 				PROVISIONING_PROFILE = "8F980E3F-63BA-48AA-80D1-DAE03881D3E2";
