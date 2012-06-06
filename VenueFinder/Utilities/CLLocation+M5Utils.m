@@ -1,10 +1,6 @@
-//
 //  CLLocation+Utils.m
-//  VenueFinder
-//
-//  Created by Tim Clem on 5/31/12.
-//  Copyright (c) 2012 Socialbomb. All rights reserved.
-//
+//  Copyright (c) 2012 Socialbomb.
+//  This code is distributed under the terms and conditions of the MIT license.
 
 #import "CLLocation+M5Utils.h"
 

@@ -1,6 +1,6 @@
-//
-// Prefix header for all source files of the 'VenueFinder' target in the 'VenueFinder' project
-//
+//  VenueFinder-Prefix.pch
+//  Copyright (c) 2012 Socialbomb.
+//  This code is distributed under the terms and conditions of the MIT license.
 
 #import <Availability.h>
 

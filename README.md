@@ -32,3 +32,7 @@ But moreover, it is our hope that this project serves as useful non-trivial exam
 - Reverse geocoding
 - Interaction with an external API, and deserializing JSON from it into real objects
 - Protocols and delegates
+
+License
+-------
+Venue Finder is available under the MIT license. See the LICENSE file for details.

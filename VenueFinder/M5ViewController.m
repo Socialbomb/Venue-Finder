@@ -1,10 +1,6 @@
-//
 //  M5ViewController.m
-//  Venue Finder
-//
-//  Created by Tim Clem on 3/21/12.
-//  Copyright (c) 2012 Socialbomb. All rights reserved.
-//
+//  Copyright (c) 2012 Socialbomb.
+//  This code is distributed under the terms and conditions of the MIT license.
 
 #import <MapKit/MapKit.h>
 #import <QuartzCore/QuartzCore.h>
