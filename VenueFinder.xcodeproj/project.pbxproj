@@ -503,7 +503,7 @@
 		BD23D1C3151A3D5B00880922 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tim Clem (FR5UGCV7R7)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
@@ -512,7 +512,7 @@
 					"\"$(SRCROOT)/TestFlight-SDK\"",
 				);
 				PRODUCT_NAME = "Venue Finder";
-				PROVISIONING_PROFILE = "8DEEC147-7FF4-4093-968C-81DCB755B258";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -520,7 +520,7 @@
 		BD23D1C4151A3D5B00880922 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tim Clem (FR5UGCV7R7)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VenueFinder/VenueFinder-Prefix.pch";
 				INFOPLIST_FILE = "VenueFinder/VenueFinder-Info.plist";
@@ -529,7 +529,7 @@
 					"\"$(SRCROOT)/TestFlight-SDK\"",
 				);
 				PRODUCT_NAME = "Venue Finder";
-				PROVISIONING_PROFILE = "8DEEC147-7FF4-4093-968C-81DCB755B258";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
